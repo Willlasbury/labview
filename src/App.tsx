@@ -12,13 +12,10 @@ function App() {
   const pulseGate: Array<string> = ['Pass All', 'Block All', 'Periodic', 'Single Shot']
   const pulseClockOut: Array<string> = Array.from({length: 10}).map((_,i,a) => `${10 * (a.length-i)}E+6`)
   const period: Array<string> = Array.from({length: 5}).map((_,i)=>`${i + 1}n`)
-  
+
   return (
     <>
-      <DropdownList setItems={setItems}/>
-      <div>{items}</div>
-      <OnOffButton/>
-      <ScrollAreaComp title={'Placeholder'} pulseWidth={pulseWidth}/>
+      
     </>
   )
 }
