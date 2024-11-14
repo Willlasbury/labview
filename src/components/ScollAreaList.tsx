@@ -1,14 +1,14 @@
 import { ScrollArea } from "@/components/subComp/scroll-area"
 import { Separator } from "@/components/subComp/separator"
-import type { subObjData } from "@/utils/fakeData"
+import type { subObjData  } from "@/utils/fakeData"
 
 type ScrollAreaProps = {
   title: string,
-  data: subObjData
+  data: subObjData 
 }
 
-export function ScrollAreaComp({ title, data }: ScrollAreaProps) {
-
+export function ScrollAreaList({ title, data }: ScrollAreaProps) {
+  console.log("data:", data)
   return (
     <section>
       <h4 id="scroll-area-title">{title}</h4>
@@ -16,7 +16,7 @@ export function ScrollAreaComp({ title, data }: ScrollAreaProps) {
         <div className="p-4">
           {data.array.map((val: string) => (
             <div key={val}>
-              <div className="text-sm">{val}<sup>{data.unit}</sup></div>
+               <div className="text-sm">{val}{data.unit && <sup>{data.unit}</sup>}</div>
               <Separator className="my-2" />
             </div>
           ))}
