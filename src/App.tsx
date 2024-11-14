@@ -1,13 +1,14 @@
 import './App.css'
+import { useState } from 'react';
+import { PopOver } from './components/PopOver'
 import { fakeData } from './utils/fakeData'
-import { ScrollAreaComp } from './components/ScollAreaList'
 
 function App() {
-  
+  const [item, setItem] = useState<String>('fdsa');
   
   return (
     <>
-      <ScrollAreaComp title={'Pulse Width'} data={fakeData.pulseWidth}/>
+      <PopOver label={'Pulse Features'} setItem={setItem} />
     </>
   )
 }

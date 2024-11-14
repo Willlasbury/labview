@@ -5,7 +5,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/subComp/select"
 
 type DropDownListProps = {
   setItems: (n: String) => void

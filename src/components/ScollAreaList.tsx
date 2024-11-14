@@ -1,5 +1,5 @@
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
+import { ScrollArea } from "@/components/subComp/scroll-area"
+import { Separator } from "@/components/subComp/separator"
 import type { subObjData } from "@/utils/fakeData"
 
 type ScrollAreaProps = {
