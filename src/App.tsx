@@ -1,7 +1,7 @@
 import './App.css'
 import { CommandWindow } from './pages/CommandWindow';
 import { SessionLog } from './pages/SessionLog';
-import { SideNavigationComponent } from './components/Navigation';
+import { SideNavigationComponent } from './components/radixComps/Navigation';
 
 function App() {
   const pageList: Array<{
