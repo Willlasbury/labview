@@ -22,7 +22,6 @@ type SideBarNavProps = {
 
 export function SideNavigationComponent({pageList}:SideBarNavProps) {
   const [activeTab, setActiveTab] = React.useState(pageList[0].label)
-  console.log("activeTab :", activeTab)
   
   return (
     <SidebarProvider>

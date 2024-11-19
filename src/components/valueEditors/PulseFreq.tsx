@@ -1,18 +1,16 @@
+import LabelInput from '@/components/genericComp/LabelInput'
+
+
 type LabelInputProp = {
-    label: string,
-    val: number,
-    setVal: (val: number) => void
+    label: string
+    description: string
+    value: number
+    setValue: (value: number) => void
 }
 
-export default function LabelInput ({label, val, setVal}: LabelInputProp) {
+export default function PulseFreq ({label, value, description setValue}: LabelInputProp) {
     
     return (
-        <div className="border-solid border-white border-2">
-        <label htmlFor={label} className="">
-        {label}
-        </label>
-        <input id={label} type='number' defaultValue={val} onChange={(e)=>setVal(Number(e.target.value))}/>
-        
-        </div>
+        <LabelInput label={label} description={description}/>
     )
 }

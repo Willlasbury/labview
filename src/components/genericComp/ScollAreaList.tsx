@@ -4,19 +4,21 @@ import type { subObjData  } from "@/utils/fakeData"
 
 type ScrollAreaProps = {
   title: string,
-  data: subObjData 
+  valueOptions: subObjData
+  value: string
+  setValue: (value: string) => void
 }
 
-export function ScrollAreaList({ title, data }: ScrollAreaProps) {
-  console.log("data:", data)
+export function ScrollAreaList({ title, valueOptions, value, setValue }: ScrollAreaProps) {
+  
   return (
     <section>
       <h4 id="scroll-area-title">{title}</h4>
       <ScrollArea className="h-36 w-fit rounded-md border">
         <div className="p-4">
-          {data.array.map((val: string) => (
+          {valueOptions.array.map((val: string) => (
             <div key={val}>
-               <div className="text-sm">{val}{data.unit && <sup>{data.unit}</sup>}</div>
+               <div className="text-sm">{val}{valueOptions.unit && <sup>{valueOptions.unit}</sup>}</div>
               <Separator className="my-2" />
             </div>
           ))}
