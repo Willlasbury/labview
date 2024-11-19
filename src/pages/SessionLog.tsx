@@ -21,11 +21,11 @@ export function SessionLog() {
 
     return (
         <>
-            <LabelInput label={"Pulse Frequency"} unit="Hz" value={pulseFreq} setValue={setPulseFreq} />
-            <LabelInput label={"Period"} unit="s" value={period} setValue={setPeriod} />
+            <LabelInput title={"Pulse Frequency"} unit="Hz" value={pulseFreq} setValue={setPulseFreq} />
+            <LabelInput title={"Period"} unit="s" value={period} setValue={setPeriod} />
             <ScrollAreaList title={"Pulse Gate"} valueOptions={fakeData.pulseGate} value={pulseGate} setValue={setPulseGate} />
-            <LabelInput label={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} />
-            <LabelInput label={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
+            <LabelInput title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} />
+            <LabelInput title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
             <OnOffButton title={"Output Enabled"} value={outPutEnabled} setValue={setOutPutEnabled} />
             <DropdownList title={"Low Res Pulse Width"} unit="s" valueOptions={fakeData.lowResPulseWidth.array} setValue={setLowResPulseWidth} />
             <DropdownList title={"Low Res Pulse DC"} unit="%" valueOptions={fakeData.lowResPulseDC.array} setValue={setLowResPulseDC} />

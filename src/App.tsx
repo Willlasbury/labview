@@ -1,6 +1,6 @@
 import './App.css'
 import { useState } from 'react';
-import { CommandWindow } from './pages/CommandWindow';
+import  CommandWindow  from './pages/CommandWindow';
 import { SessionLog } from './pages/SessionLog';
 import { SideNavigationComponent } from './components/genericComp/Navigation';
 

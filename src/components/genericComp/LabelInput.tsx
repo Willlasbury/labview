@@ -6,7 +6,7 @@ import TooltipWrapper from "./ToolTipWrapper"
 import { cn } from "@/lib/utils"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string
+  title: string
   unit?: string
   description?: string
   value: number
@@ -14,7 +14,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export default function LabelInput({
-  label,
+  title,
   unit,
   description,
   value,
@@ -27,13 +27,13 @@ export default function LabelInput({
   return (
     <div className="flex flex-row w-full max-w-sm space-y-2">
     <TooltipWrapper text={description}>
-      <Label htmlFor={label} className="flex text-center items-center pr-2 text-lg font-medium text-gray-200 dark:text-gray-300">
-        {label}
+      <Label htmlFor={title} className="flex text-center items-center pr-2 text-lg font-medium text-gray-200 dark:text-gray-300">
+        {title}
       </Label>
     </TooltipWrapper>
       <Input
         type={typeof value}
-        id={label}
+        id={title}
         className={cn(
           "block h-8 rounded-md border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm dark:focus:border-gray-50 dark:focus:ring-gray-50",
           className
