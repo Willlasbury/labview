@@ -8,16 +8,18 @@ import {
 } from "@/components/ui/select"
 
 import { Label } from "@/components/ui/label"
+import TooltipWrapper from "./ToolTipWrapper"
 
 type DropDownListProps = {
   title: string
+  description?: string
   unit?: string
   valueOptions: Array<string>
   value?: any
   setValue: (value: any) => void;
 }
 
-export function DropdownList({ title, unit, valueOptions, setValue }: DropDownListProps) {
+export function DropdownList({ title, description, unit, valueOptions, setValue }: DropDownListProps) {
   const handleChange = (val: string) => {
     if (Number(val)) {
       return setValue(Number(val))
@@ -25,11 +27,12 @@ export function DropdownList({ title, unit, valueOptions, setValue }: DropDownLi
     setValue(val)
   }
   return (
-    <div className="flex flex-row mb-1 md:max-w-96">
-
-      <Label htmlFor={title} className="min-w-56">
-        {title} {unit && `(${unit})`}
-      </Label>
+    <div className="flex flex-row mb-1">
+      <TooltipWrapper text={description}>
+        <Label htmlFor={title} className="min-w-56">
+          {title} {unit && `(${unit})`}
+        </Label>
+      </TooltipWrapper>
       <Select onValueChange={(value) => handleChange(value)}>
         <SelectTrigger className="w-full min-w-56">
           <SelectValue placeholder={valueOptions[0]} />

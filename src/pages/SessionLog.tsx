@@ -29,7 +29,7 @@ export function SessionLog() {
                 <section className="flex flex-col h-1/8 w-full mb-8">
                     <div className="w-full flex flex-col justify-center">
 
-                        <LabelInput title={"Pulse Frequency"} unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
+                        <LabelInput title={"Pulse Frequency"} description="hello" unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
                         <LabelInput title={"Period"} unit="ns" value={period} setValue={setPeriod} />
                     </div>
                     <div className="w-full">
@@ -40,8 +40,8 @@ export function SessionLog() {
                 </section>
                 <section className="mb-8 flex flex-col flex-wrap w-full">
 
-                        <DropdownList title={"Pulse Gate"} valueOptions={fakeData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
-                        <DropdownList title={"Low Res Pulse Width"} unit="ns" valueOptions={fakeData.lowResPulseWidth.array} setValue={setLowResPulseWidth} />
+                        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={fakeData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
+                        <DropdownList title={"Low Res Pulse Width"} description={'some text'} unit="ns" valueOptions={fakeData.lowResPulseWidth.array} setValue={setLowResPulseWidth} />
                         <DropdownList title={"Low Res Pulse DC"} unit="%" valueOptions={fakeData.lowResPulseDC.array} setValue={setLowResPulseDC} />
                         <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={fakeData.pulseClockOut.array} setValue={setPulseClockRatio} />
                 </section>

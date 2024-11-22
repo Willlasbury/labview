@@ -14,7 +14,7 @@ type CounterProps = {
 }
 
 export default function Counter({ title, unit, min = 0, max = 10, step = 1, value, setValue }: CounterProps) {
-    const [isHovering, setIsHovering] = useState(false)
+    // const [isHovering, setIsHovering] = useState(false)
 
     const increment = () => {
         const num = Math.min(value + step, max)
@@ -29,8 +29,8 @@ export default function Counter({ title, unit, min = 0, max = 10, step = 1, valu
     return (
         <div
             className="w-full mt-4 bg-slate-600 rounded-md py-1 px-2 max-w-96"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
+            // onMouseEnter={() => setIsHovering(true)}
+            // onMouseLeave={() => setIsHovering(false)}
         >
             <h4 className='text-center text-lg font-semibold'>{title}{unit && ` (${unit})`}:  <span className="text-xl font-bold">{value}</span></h4>
             <div className="flex items-center justify-between">
