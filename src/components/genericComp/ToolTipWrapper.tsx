@@ -18,11 +18,12 @@ const TooltipWrapper: FC<TooltipWrapperProps> = ({ children, text }) =>  {
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
                             <Tooltip.Content
-                                className="select-none rounded bg-white text-black px-[15px] py-2.5 text-[15px] leading-none text-violet11 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] will-change-[transform,opacity] data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade"
+                                className="select-none rounded bg-white border-solid  border-black border-2 text-black px-[15px] py-2.5 text-[15px] leading-none text-violet11 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] will-change-[transform,opacity] data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade"
                                 sideOffset={5}
+                                side="right"
                             >
                                 {text}
-                                <Tooltip.Arrow className="fill-white" />
+                                {/* <Tooltip.Arrow className="fill-white border-solid  border-black border-2" /> */}
                             </Tooltip.Content>
                         </Tooltip.Portal>
                     </Tooltip.Root>

@@ -20,12 +20,11 @@ type SideBarNavProps = {
   }>
 }
 
-export function SideNavigationComponent({pageList}:SideBarNavProps) {
+export function SideNavigationComponent({ pageList }: SideBarNavProps) {
   const [activeTab, setActiveTab] = React.useState(pageList[0].label)
-  
+
   return (
     <SidebarProvider>
-      <div className="flex h-screen">
         <Sidebar className="border-r">
           <SidebarContent>
             <SidebarMenu>
@@ -43,12 +42,8 @@ export function SideNavigationComponent({pageList}:SideBarNavProps) {
           </SidebarContent>
           <SidebarRail />
         </Sidebar>
-        <main className="flex-1 flex-row overflow-y-auto p-4 w-screen ">
-          <SidebarTrigger className="mb-4 lg:hidden" />
-          <h1 className="mb-4 text-2xl font-bold">{activeTab}</h1>
-          <>{pageList.find(item => item.label === activeTab)?.content}</>
-        </main>
-      </div>
+        <SidebarTrigger className="mb-4 lg:hidden" />
+        {pageList.find(item => item.label === activeTab)?.content}
     </SidebarProvider>
   )
 }

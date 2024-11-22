@@ -1,5 +1,5 @@
-import { ScrollArea } from "@/components/subComp/scroll-area"
-import { Separator } from "@/components/subComp/separator"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
 import type { subObjData  } from "@/utils/fakeData"
 
 type ScrollAreaProps = {
@@ -13,8 +13,8 @@ export function ScrollAreaList({ title, valueOptions, value, setValue }: ScrollA
   
   return (
     <section>
-      <h4 id="scroll-area-title">{title}</h4>
-      <ScrollArea className="h-36 w-fit rounded-md border">
+      <h4 id="scroll-area-title" className="font-bold text-center">{title}</h4>
+      <ScrollArea className="h-36 w-fit rounded-md border" onChange={(e) => {setValue(String(e.target))}}>
         <div className="p-4">
           {valueOptions.array.map((val: string) => (
             <div key={val}>

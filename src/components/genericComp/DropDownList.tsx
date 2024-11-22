@@ -5,27 +5,31 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/subComp/select"
-import { Dispatch, SetStateAction } from "react"
+} from "@/components/ui/select"
 
 type DropDownListProps = {
   title: string
   unit?: string
   valueOptions: Array<string>
-  value?: number
-  setValue:  (value: number) => void;
+  value?: any
+  setValue: (value: any) => void;
 }
 
-export function DropdownList({title, unit, valueOptions, value, setValue }: DropDownListProps) {
-
+export function DropdownList({ title, unit, valueOptions, setValue }: DropDownListProps) {
+  const handleChange = (val: string) => {
+    if (Number(val)) {
+      return setValue(Number(val))
+    }
+    setValue(val)
+  }
   return (
-    <div className="selector">
-      <h2>{title}({unit})</h2>
-      <Select onValueChange={(value) => setValue(Number(value))}>
-        <SelectTrigger className="w-full">
+    <div className="flex flex-row w-full mx-1 mb-1 max-w-80">
+      <h2 className="w-1/2  font-medium">{title} {unit && `(${unit})`}</h2>
+      <Select onValueChange={(value) => handleChange(value)}>
+        <SelectTrigger className="w-full ">
           <SelectValue placeholder={valueOptions[0]} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent >
           <SelectGroup>
             {valueOptions.map(item => {
               return <SelectItem key={item} value={item}>{item}</SelectItem>
