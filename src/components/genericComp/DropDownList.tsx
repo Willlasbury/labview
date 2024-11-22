@@ -7,6 +7,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+import { Label } from "@/components/ui/label"
+
 type DropDownListProps = {
   title: string
   unit?: string
@@ -23,10 +25,13 @@ export function DropdownList({ title, unit, valueOptions, setValue }: DropDownLi
     setValue(val)
   }
   return (
-    <div className="flex flex-row w-full mx-1 mb-1 max-w-80">
-      <h2 className="w-1/2  font-medium">{title} {unit && `(${unit})`}</h2>
+    <div className="flex flex-row mb-1 md:max-w-96">
+
+      <Label htmlFor={title} className="min-w-56">
+        {title} {unit && `(${unit})`}
+      </Label>
       <Select onValueChange={(value) => handleChange(value)}>
-        <SelectTrigger className="w-full ">
+        <SelectTrigger className="w-full min-w-56">
           <SelectValue placeholder={valueOptions[0]} />
         </SelectTrigger>
         <SelectContent >

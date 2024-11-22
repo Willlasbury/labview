@@ -41,7 +41,7 @@ export function SessionLog() {
                 <section className="mb-8 flex flex-col flex-wrap w-full">
 
                         <DropdownList title={"Pulse Gate"} valueOptions={fakeData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
-                        <DropdownList title={"Low Res Pulse Width"} unit="s" valueOptions={fakeData.lowResPulseWidth.array} setValue={setLowResPulseWidth} />
+                        <DropdownList title={"Low Res Pulse Width"} unit="ns" valueOptions={fakeData.lowResPulseWidth.array} setValue={setLowResPulseWidth} />
                         <DropdownList title={"Low Res Pulse DC"} unit="%" valueOptions={fakeData.lowResPulseDC.array} setValue={setLowResPulseDC} />
                         <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={fakeData.pulseClockOut.array} setValue={setPulseClockRatio} />
                 </section>
