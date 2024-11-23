@@ -1,26 +1,40 @@
 "use client"
 
-import * as React from "react"
+import {useState, useEffect} from "react"
 import {Root, Thumb} from "@radix-ui/react-switch"
 
 type OnOffButtonProps = {
-  title: string
+  title: string[]
   value: boolean
   setValue: (bool: boolean) => void
 }
 
-export function OnOffButton({title, value, setValue}: OnOffButtonProps) {
+export function  OnOffButton({title, value, setValue}: OnOffButtonProps) {
 
-  const handleSwitchChange = (checked: boolean) => {
-    setValue(checked)
+  const [fade, setFade] = useState(false);
+  const [displayText, setDisplayText] = useState(title[0]);
+
+  useEffect(() => {
+    setDisplayText(displayText==title[0] ? title[1]: title[0])
+    setFade(true);
+
+    const timer = setTimeout(() => {
+      setFade(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [value]);
+
+  const handleSwitchChange = (e: boolean) => {
+    setValue(e)
   }
 
   return (
     <div className="flex items-center space-x-2">
-      <h4>{title}</h4>
+      <h4 className={`transition-opacity duration-500 ease-in-out ${fade ? "opacity-0 scale-95" : "opacity-100 scale-100"}`}>{displayText}</h4>
       <Root
         checked={value}
-        onCheckedChange={handleSwitchChange}
+        onCheckedChange={(e) => handleSwitchChange(e)}
         className={`w-[42px] h-[25px] ${value ? "bg-blue-600" : "bg-grey-400"} rounded-full relative focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-colors duration-200 ease-in-out 
         `}
       >

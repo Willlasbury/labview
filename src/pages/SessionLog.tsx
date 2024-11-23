@@ -18,7 +18,6 @@ export function SessionLog() {
     const [lowResPulseDC, setLowResPulseDC] = useState<number>(1);
     const [pulseClockRatio, setPulseClockRatio] = useState<number>(1);
     const [pulseDC, setPulseDC] = useState<number>(1);
-    console.log("pulseFreq:", pulseFreq)
 
     return (
         <div className="flex flex-col overflow-y-auto w-full h-full">
