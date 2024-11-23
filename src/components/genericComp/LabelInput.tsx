@@ -1,6 +1,6 @@
 import * as React from "react"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+import { Label } from "@/components/subComp/label"
+import { Input } from "@/components/subComp/input"
 // import { Tooltip, TooltipTrigger, TooltipPortal, TooltipArrow, TooltipContent, TooltipProvider } from "../ui/tooltip"
 import TooltipWrapper from "./ToolTipWrapper"
 

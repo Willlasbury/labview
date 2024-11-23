@@ -1,6 +1,6 @@
 import {Root, Trigger, Portal, Content, Close, Arrow} from "@radix-ui/react-popover";
 import { X } from "lucide-react";
-import PopOverItem from "../ui/pop-over-item";
+import PopOverItem from "../subComp/pop-over-item";
 
 
 type PopOverProp = {

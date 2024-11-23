@@ -16,15 +16,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* --bg-color: blue */
-  /* &[color-mode="light"] {
-  }
-  
-  &[color-mode="dark"] {
-    --bg-color: black
-  } */
-
 }
 
 a {
@@ -104,11 +95,5 @@ button:focus-visible {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-  }
-}
-
-@media screen and (max-width:412px) {
-  body {
-    background-color: salmon;
   }
 }

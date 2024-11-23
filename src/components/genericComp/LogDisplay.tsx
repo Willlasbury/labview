@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Button } from "@/components/subComp/button"
+import { ScrollArea } from "@/components/subComp/scroll-area"
 import { ChevronUp, ChevronDown, Trash } from "lucide-react"
 
 type StringLoggerProps = {
@@ -27,7 +27,7 @@ export function StringLogger({title, input}: StringLoggerProps) {
   return (
       <div className="w-full border rounded-lg shadow-lg bg-white dark:bg-gray-950">
         <div className="flex items-center justify-between p-2 border-b">
-          <div className="text-sm font-medium">String Logger</div>
+          <div className="text-sm font-medium text-black">String Logger</div>
           <div className="flex items-center space-x-2">
             <Button variant="ghost" size="icon" onClick={() => setIsMinimized(!isMinimized)}>
               {isMinimized ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}

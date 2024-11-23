@@ -21,9 +21,9 @@ export function SessionLog() {
     console.log("pulseFreq:", pulseFreq)
 
     return (
-        <div className="flex flex-col flex-wrap p-2 w-full ">
-            <main className="flex flex-1 flex-col overflow-y-auto py-4 px-6 bg-slate-700 rounded-md">
-                <header>
+        <div className="flex flex-col overflow-y-auto w-full h-full">
+            {/* <main className="flex flex-1 flex-col overflow-y-auto py-4 px-6 rounded-md"> */}
+                <header className="pl-10">
                     <h1 className="mb-8 text-2xl font-extrabold">Session Log</h1>
                 </header>
                 <section className="flex flex-col h-1/8 w-full mb-8">
@@ -40,16 +40,16 @@ export function SessionLog() {
                 </section>
                 <section className="mb-8 flex flex-col flex-wrap w-full">
 
-                        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={fakeData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
-                        <DropdownList title={"Low Res Pulse Width"} description={'some text'} unit="ns" valueOptions={fakeData.lowResPulseWidth.array} setValue={setLowResPulseWidth} />
-                        <DropdownList title={"Low Res Pulse DC"} unit="%" valueOptions={fakeData.lowResPulseDC.array} setValue={setLowResPulseDC} />
-                        <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={fakeData.pulseClockOut.array} setValue={setPulseClockRatio} />
+                    <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={fakeData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
+                    <DropdownList title={"Low Res Pulse Width"} description={'some text'} unit="ns" valueOptions={fakeData.lowResPulseWidth.array} setValue={setLowResPulseWidth} />
+                    <DropdownList title={"Low Res Pulse DC"} unit="%" valueOptions={fakeData.lowResPulseDC.array} setValue={setLowResPulseDC} />
+                    <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={fakeData.pulseClockOut.array} setValue={setPulseClockRatio} />
                 </section>
                 <OnOffButton title={"Output Enabled"} value={outPutEnabled} setValue={setOutPutEnabled} />
-            </main>
-            <footer className="w-full max-w-md mx-auto">
+            {/* </main> */}
+            {/* <footer className="w-full mx-auto"> */}
                 <StringLogger title={'Session Log'} input={'input'} />
-            </footer>
+            {/* </footer> */}
         </div>
     )
 }

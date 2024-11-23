@@ -9,7 +9,7 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
-} from '@/components/ui/sidebar'
+} from '@/components/subComp/sidebar'
 
 
 
@@ -25,6 +25,7 @@ export function SideNavigationComponent({ pageList }: SideBarNavProps) {
 
   return (
     <SidebarProvider>
+      <div className="flex h-screen">
         <Sidebar className="border-r">
           <SidebarContent>
             <SidebarMenu>
@@ -42,8 +43,13 @@ export function SideNavigationComponent({ pageList }: SideBarNavProps) {
           </SidebarContent>
           <SidebarRail />
         </Sidebar>
-        <SidebarTrigger className="mb-4 lg:hidden" />
-        {pageList.find(item => item.label === activeTab)?.content}
+        <main className="flex-1 flex-row overflow-y-auto p-4 w-dvw ">
+
+
+          <SidebarTrigger className="mb-4 lg:hidden" />
+          {pageList.find(item => item.label === activeTab)?.content}
+        </main>
+      </div>
     </SidebarProvider>
   )
 }

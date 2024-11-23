@@ -5,9 +5,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/subComp/select"
 
-import { Label } from "@/components/ui/label"
+import { Label } from "@/components/subComp/label"
 import TooltipWrapper from "./ToolTipWrapper"
 
 type DropDownListProps = {
@@ -29,12 +29,12 @@ export function DropdownList({ title, description, unit, valueOptions, setValue 
   return (
     <div className="flex flex-row mb-1">
       <TooltipWrapper text={description}>
-        <Label htmlFor={title} className="min-w-56">
+        <Label htmlFor={title} className="">
           {title} {unit && `(${unit})`}
         </Label>
       </TooltipWrapper>
       <Select onValueChange={(value) => handleChange(value)}>
-        <SelectTrigger className="w-full min-w-56">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder={valueOptions[0]} />
         </SelectTrigger>
         <SelectContent >

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import * as Slider from '@radix-ui/react-slider'
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/subComp/button"
 import { Minus, Plus } from 'lucide-react'
 
 type CounterProps = {

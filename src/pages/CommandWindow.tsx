@@ -31,7 +31,7 @@ export default function CommandWindow() {
             {/* add lock to duty cycle */}
             <LabelInput title={"Duty Cycle"} unit={"%"} value={dutyCycle} setValue={setDutyCycle} />
             <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={fakeData.pulseClockOut.array} setValue={setPulseClockRatio} />
-            <Counter title={'Pulse DC Offset'} unit={'V'} count={pulseDC} setCount={setPulseDC}/>
+            <Counter title={'Pulse DC Offset'} unit={'V'} value={pulseDC} setValue={setPulseDC}/>
         </>
     )
 }
