@@ -63,12 +63,9 @@ export default function WaveformWithClock({
   const [frequencyRatio, setFrequencyRatio] = useState({ sine: 0.5, square: 1 })
 
   const generateWaveform = useMemo(() => {
-    const sineCycleLength = sineCycles > 0 ? (sineCycles / pulseFreq) : timeScale
-    const squareCycleLength = timeScale
-    const maxLength = Math.max(sineCycleLength, squareCycleLength)
 
     return Array.from({ length: 400 }, (_, i) => {
-      const x = (i / 399) * maxLength
+      const x = (i / 399) * timeScale
 
       const sinePatternLength = pulseNumOn + pulseNumOff
       const sinePatternPosition = Math.floor(x * pulseFreq * pulseClockRatio) % sinePatternLength
