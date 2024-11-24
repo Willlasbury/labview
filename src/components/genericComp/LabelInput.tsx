@@ -8,6 +8,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   title: string
   unit?: string
   description?: string
+  min?: number
+  max?: number
+  step?: number
   value: number
   setValue: (val: number) => void
 }
@@ -16,22 +19,27 @@ export default function LabelInput({
   title,
   unit = undefined,
   description,
+  min,
+  max,
+  step,
   value,
   setValue,
 }: InputProps) {
-
-
+  console.log("pulseWidth:", title, value)
   return (
-    <div className="flex flex-row mb-1 md:max-w-96 ">
+    <div className="flex flex-row mb-1 md:max-w-96">
       <TooltipWrapper text={description}>
-        <Label htmlFor={title}>
-            {title} {unit && `(${unit})`}
+        <Label htmlFor={title} className="text-slate-700">
+          {title} {unit && `(${unit})`}
         </Label>
       </TooltipWrapper>
       <Input
         type={typeof value}
         id={title}
-        defaultValue={value}
+        value={value}
+        max={max}
+        min={min}
+        step={step}
         className={"block h-6 w-16 text-right text-black text-lg rounded-md border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm dark:focus:border-gray-50 dark:focus:ring-gray-50"}
         onChange={(e) => setValue(Number(e.target.value))}
       />

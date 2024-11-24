@@ -16,6 +16,8 @@ import { constantData } from "@/utils/constantData"
 
 interface WaveformWithClockProps {
   title?: string
+  masterPeriod: number
+  setMasterPeriod: (masterPeriod: number) => void
   pulseFreq: number
   setPulseFreq: (pulseFreq: number) => void
   pulseLock: boolean
@@ -37,6 +39,8 @@ interface WaveformWithClockProps {
 
 export default function WaveformWithClock({
   title,
+  masterPeriod,
+  setMasterPeriod,
   pulseFreq,
   setPulseFreq,
   pulseLock,
@@ -54,37 +58,46 @@ export default function WaveformWithClock({
 
 }: WaveformWithClockProps) {
   const [timeScale, setTimeScale] = useState(10)
-  const [pulseWidth, setPulseWidth] = useState(pulseFreq);
-  // const [sinePeriod, setSinePeriod] = useState<number>(pulseFreq);
 
-  const handleDutyCycle = (val: number) => {
-    setPulseWidth(val/100)
-  }
 
+  // this is currently acting as pulse width 
+  const [pulseWidth, setPulseWidth] = useState(masterPeriod);
+  
   const generateWaveform = useMemo(() => {
     const dataPoints = 10000
     return Array.from({ length: dataPoints }, (_, i) => {
       const x = (i / (dataPoints - 1)) * timeScale
-
+      
       const sinePatternLength = pulseNumOn + pulseNumOff
       const sinePatternPosition = Math.floor(x * pulseFreq * pulseClockRatio) % sinePatternLength
-      const sineActivePeriod = (x % (1 / pulseFreq)) < pulseWidth || 0
-
-      const sinePhaseWithinPeriod = sineActivePeriod ? ((x % (1 / pulseFreq)) / pulseWidth) * (2 * Math.PI) : null
-
-
+      const sineActivePeriod = (x % (1 / pulseFreq)) < pulseWidth
+      
+      const sinePhaseWithinPeriod = sineActivePeriod ? ((x % (masterPeriod)) / pulseWidth) * (2 * Math.PI) : null
+      
+      
       const sineValue = sinePatternPosition < pulseNumOn && sineActivePeriod && sinePhaseWithinPeriod !== null
-        ? Math.sin(sinePhaseWithinPeriod) + dcOffset
-        : null
-
-      const squareValue = Math.sign(Math.sin(x * pulseFreq * 2 * Math.PI))
-
+      ? Math.sin(sinePhaseWithinPeriod) + dcOffset
+      : null
+      
+      const squareValue = Math.sign(Math.sin(x * 1/masterPeriod * 2 * Math.PI))
+      
       return { x, sine: sineValue, square: squareValue }
     })
-  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, pulseClockRatio, dcOffset, pulseWidth])
-
+  }, [masterPeriod, pulseFreq, pulseNumOn, pulseNumOff, timeScale, pulseClockRatio, dcOffset, pulseWidth])
+  
   const xAxisDomain = [0, timeScale]
+  
+  const handleDutyCycle = (val: number) => {
+    setPulseWidth(masterPeriod * val/100)
+  }
 
+  const handleMasterPeriod = (val: number) => {
+    if (val < pulseWidth) {
+      setPulseWidth(val)
+    }
+    setMasterPeriod(val)
+  }
+  console.log("pulseWidth:", pulseWidth)
   return (
     <Card>
       <CardHeader>
@@ -103,7 +116,7 @@ export default function WaveformWithClock({
                 tickFormatter={(value) => value.toFixed(2)}
                 label={{ value: "Time (s)", position: "insideBottomRight", offset: -5 }}
               />
-              <YAxis domain={[dcOffset - 1.1, dcOffset + 1.1]} />
+              <YAxis domain={[dcOffset - 1, dcOffset + 1]} />
               <Line
                 type="monotone"
                 dataKey="sine"
@@ -129,10 +142,14 @@ export default function WaveformWithClock({
 
         {/* CONTROLS */}
         <div className="space-y-2">
-          <LabelInput title={"Pulse Period"} description="hello" unit="s" value={pulseFreq} setValue={setPulseFreq} />
+          {/* grab the to be made master freq and create a component to and flip it adjust period this should then
+          go back to adjust the squareValue component */}
+          <LabelInput title={"Clock Period"} description="hello" unit="s" value={masterPeriod} setValue={handleMasterPeriod} />
+          {/* <LabelInput title={"Pulse Period"} description="hello" unit="s" value={pulseFreq} setValue={setPulseFreq} /> */}
           <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
-          <Counter title={"Duty Cycle"} unit="%" min={0} max={100} step={1} value={pulseWidth * 100} setValue={handleDutyCycle} />
-
+          <Counter title={"Duty Cycle"} unit="%" min={0} max={100} step={1} value={ (pulseWidth / masterPeriod) * 100 } setValue={handleDutyCycle} />
+          <LabelInput title={"Pulse Width"} description="hello" unit="s" min={0} max={masterPeriod} step={0.01} value={pulseWidth} setValue={setPulseWidth} />
+            
           <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} min={-100} max={100} />
         </div>
         <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import * as Slider from '@radix-ui/react-slider'
 import { Button } from "@/components/subComp/button"
 import { Minus, Plus } from 'lucide-react'
@@ -25,13 +24,8 @@ export default function Counter({ title, unit, min = 0, max = 10, step = 1, valu
         const num = Math.max(value - step, min)
         setValue(num)
     }
-
     return (
-        <div
-            className="w-full mt-4 bg-slate-600 rounded-md py-1 px-2 max-w-96"
-            // onMouseEnter={() => setIsHovering(true)}
-            // onMouseLeave={() => setIsHovering(false)}
-        >
+        <div className="w-full mt-4 bg-slate-600 rounded-md py-1 px-2 max-w-96">
             <h4 className='text-center text-lg font-semibold'>{title}{unit && ` (${unit})`}:  <span className="text-xl font-bold">{value}</span></h4>
             <div className="flex items-center justify-between">
                 <Button
