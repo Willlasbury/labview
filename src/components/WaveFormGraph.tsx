@@ -48,20 +48,17 @@ export default function WaveformWithClock({
   setPulseNumOff,
   pulseGate,
   setPulseGate,
-  pulseClockRatio,
+  pulseClockRatio=1,
   setPulseClockRatio,
   // period,
   // setPeriod,
 
-  initialSineCycles = 0,
-  initialSquareCycles = 0,
   initialSineBreakPattern = { on: 3, off: 1 },
   title = "Waveform with Independent Clock Output"
 }: WaveformWithClockProps) {
   const [timeScale, setTimeScale] = useState(10)
-  const [sineCycles, setSineCycles] = useState(initialSineCycles)
-  const [squareCycles, setSquareCycles] = useState(initialSquareCycles)
-  const [sineBreakPattern, setSineBreakPattern] = useState(initialSineBreakPattern)
+  const [sineCycles, setSineCycles] = useState(0)
+  const [squareCycles, setSquareCycles] = useState(0)
   const [showSquareWave, setShowSquareWave] = useState(true)
   const [frequencyRatio, setFrequencyRatio] = useState({ sine: 0.5, square: 1 })
 
@@ -79,29 +76,17 @@ export default function WaveformWithClock({
         ? Math.sin(x * pulseFreq * pulseClockRatio * 2 * Math.PI)
         : null
 
-      // const squarePatternLength = squareBreakPattern.on + squareBreakPattern.off
-      // const squarePatternPosition = Math.floor(x * pulseFreq * frequencyRatio.square) 
-      // const squareValue = squarePatternPosition < squareBreakPattern.on
-      //   ? Math.sign(Math.sin(x * pulseFreq * frequencyRatio.square * 2 * Math.PI))
-      //   : null
-
       const squareValue = Math.sign(Math.sin(x * pulseFreq * 2 * Math.PI))
 
       return { x, sine: sineValue, square: squareValue }
     })
-  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, sineBreakPattern, pulseClockRatio])
+  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, pulseClockRatio])
 
   const xAxisDomain = [0, Math.max(
     sineCycles > 0 ? sineCycles / pulseFreq : timeScale,
     squareCycles > 0 ? squareCycles / pulseFreq : timeScale
   )]
 
-  // const handleFrequencyRatioChange = (wave: 'sine' | 'square', value: number) => {
-  //   setFrequencyRatio(prev => ({ ...prev, [wave]: value }))
-  // }
-  // const handlePulseClockRatioChange = (val: number) => {
-  //   setPulseClockRatio(val)
-  // }
 
   console.log("pulseClockRaio:", pulseClockRatio)
   return (
@@ -150,105 +135,19 @@ export default function WaveformWithClock({
         </div>
 
         {/* CONTROLS */}
-        {/* <Tabs defaultValue="sine" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="sine">Sine Wave</TabsTrigger>
-            <TabsTrigger value="square">Square Wave</TabsTrigger>
-          </TabsList>
-          <TabsContent value="sine" className="space-y-4"> */}
         <div className="space-y-2">
         <LabelInput title={"Pulse Frequency"} description="hello" unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
 
-          {/* <Label htmlFor="sine-frequency-slider">Frequency: {pulseFreq.toFixed(2)} Hz</Label>
-          <Slider
-            id="sine-frequency-slider"
-            min={0.1}
-            max={5}
-            step={0.1}
-            value={[pulseFreq]}
-            onValueChange={(value) => setPulseFreq(value[0])}
-          /> */}
         </div>
-        {/* <div className="space-y-2">
-          <Label htmlFor="sine-cycles-select">Number of Cycles</Label>
-          <Select
-            value={sineCycles.toString()}
-            onValueChange={(value) => setSineCycles(parseInt(value))}
-          >
-            <SelectTrigger id="sine-cycles-select">
-              <SelectValue placeholder="Select number of cycles" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="0">Full Time Scale</SelectItem>
-              <SelectItem value="1">1 Cycle</SelectItem>
-              <SelectItem value="2">2 Cycles</SelectItem>
-              <SelectItem value="5">5 Cycles</SelectItem>
-              <SelectItem value="10">10 Cycles</SelectItem>
-            </SelectContent>
-          </Select>
-        </div> */}
         <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1}/>
         <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
         <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setSineCycles} />
 
-        {/* <div className="space-y-2">
-          <Label htmlFor="sine-break-pattern-on">Break Pattern (On Cycles)</Label>
-          <Input
-            id="sine-break-pattern-on"
-            type="number"
-            min="1"
-            value={pulseNumOn}
-            onChange={(e) => handleBreakPatternChange("sine", "on", parseInt(e.target.value) || 1)}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="sine-break-pattern-off">Break Pattern (Off Cycles)</Label>
-          <Input
-            id="sine-break-pattern-off"
-            type="number"
-            min="0"
-            value={pulseNumOff}
-            onChange={(e) => handleBreakPatternChange("sine", "off", parseInt(e.target.value) || 0)}
-          />
-        </div> */}
         <div className="space-y-2">
         <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
 
-          {/* <Label htmlFor="sine-frequency-ratio">Pulse Clock Out Ratio</Label>
-          <Input
-            id="sine-frequency-ratio"
-            type="number"
-            min="1"
-            max="10"
-            value={frequencyRatio.sine}
-            onChange={(e) => handleFrequencyRatioChange("sine", parseInt(e.target.value) || 1)}
-          /> */}
         </div>
         <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
-        {/* </TabsContent> */}
-        {/* </Tabs>
-        <div className="space-y-4 mt-4">
-          <div className="space-y-2">
-            <Label htmlFor="timescale-slider">Time Scale: {timeScale.toFixed(1)} seconds</Label>
-            <Slider
-              id="timescale-slider"
-              min={1}
-              max={20}
-              step={0.1}
-              value={[timeScale]}
-              onValueChange={(value) => setTimeScale(value[0])}
-              disabled={sineCycles > 0 || squareCycles > 0}
-            />
-          </div>
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="show-square-wave"
-              checked={showSquareWave}
-              onCheckedChange={setShowSquareWave}
-            />
-            <Label htmlFor="show-square-wave">Show Clock Output</Label>
-          </div>
-        </div> */}
       </CardContent>
     </Card>
   )
