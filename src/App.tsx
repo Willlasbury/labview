@@ -8,6 +8,17 @@ import { SideNavigationComponent } from './components/genericComp/Navigation';
 import { constantData } from './utils/constantData';
 import WaveformWithClock from './components/WaveFormGraph';
 
+
+// TODOS
+// Add logic for pulse gate
+// create better edits for pulse freq and period
+// adjust pulse width to low res pulse width when freq is less than 10MHz
+// figure out how to work pulse DC offset
+// figure out fractional pulse clock ratio 
+
+
+
+
 function App() {
 
   // const pageList: Array<{
@@ -29,6 +40,7 @@ function App() {
   const [pulseNumOn, setPulseNumOn] = useState<number>(1)
   const [pulseNumOff, setPulseNumOff] = useState<number>(0);
   const [pulseGate, setPulseGate] = useState<string>(constantData.pulseGate.array[0]);
+  const [pulseClockRatio, setPulseClockRatio] = useState<number>(1);
   // const [pulseNumOn, setPulseNumOn] = useState<number>(1);
   // const [pulseNumOff, setPulseNumOff] = useState<number>(1);
   // const [outPutEnabled, setOutPutEnabled] = useState<boolean>(false);
@@ -57,14 +69,8 @@ function App() {
         setPulseNumOff={setPulseNumOff}
         pulseGate={pulseGate}
         setPulseGate={setPulseGate}
-        
-        // period={period}
-        // setPeriod={setPeriod}
-
-        initialTimeScale={10}
-        initialSineCycles={0}
-        initialSquareCycles={0}
-        initialSineBreakPattern={{ on: 3, off: 1 }}
+        pulseClockRatio={pulseClockRatio}
+        setPulseClockRatio={setPulseClockRatio}
       />
     </>
   )

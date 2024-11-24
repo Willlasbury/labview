@@ -19,6 +19,6 @@ export const constantData: fakeDataObj = {
      lowResPulseDC : { array : Array.from({length: 15}).map((_,i)=>`${(i + 1)*Math.random()}`), unit: '-9' },
      pulseFrequencey : {array : Array.from({length: 15}).map((_,i)=>`${i + 1}`), unit: '-9'},
      pulseGate : {array : ['Pass All', 'Block All', 'Periodic', 'Single Shot'], unit: null},
-     pulseClockOut : {array: Array.from({length: 10}).map((_,i,a) => `${10 * (a.length-i)}`), unit: '+6'},
+     pulseClockOut : {array: Array.from({length: 11}).map((_,i) => `${2**(5-i)}`), unit: ''},
      period : {array: Array.from({length: 5}).map((_,i)=>`${i + 1}`), unit: 'n'},
 }

@@ -27,7 +27,8 @@ interface WaveformWithClockProps {
   setPulseNumOff: (num: number) => void
   pulseGate: string
   setPulseGate: (str: string) => void
-  
+  pulseClockRatio: number
+  setPulseClockRatio: (num: number) => void  
   // period: number
   // setPeriod: (period: number) => void
   initialTimeScale?: number
@@ -49,6 +50,8 @@ export default function WaveformWithClock({
   setPulseNumOff,
   pulseGate,
   setPulseGate,
+  pulseClockRatio,
+  setPulseClockRatio,
   // period,
   // setPeriod,
 
@@ -63,20 +66,20 @@ export default function WaveformWithClock({
   const [squareCycles, setSquareCycles] = useState(initialSquareCycles)
   const [sineBreakPattern, setSineBreakPattern] = useState(initialSineBreakPattern)
   const [showSquareWave, setShowSquareWave] = useState(true)
-  const [frequencyRatio, setFrequencyRatio] = useState({ sine: 1, square: 1 })
+  const [frequencyRatio, setFrequencyRatio] = useState({ sine: 0.5, square: 1 })
 
   const generateWaveform = useMemo(() => {
     const sineCycleLength = sineCycles > 0 ? (sineCycles / pulseFreq) : timeScale
-    const squareCycleLength = squareCycles > 0 ? (squareCycles / pulseFreq) : timeScale
+    const squareCycleLength = timeScale
     const maxLength = Math.max(sineCycleLength, squareCycleLength)
 
     return Array.from({ length: 400 }, (_, i) => {
       const x = (i / 399) * maxLength
 
       const sinePatternLength = pulseNumOn + pulseNumOff
-      const sinePatternPosition = Math.floor(x * pulseFreq * frequencyRatio.sine) % sinePatternLength
+      const sinePatternPosition = Math.floor(x * pulseFreq * pulseClockRatio) % sinePatternLength
       const sineValue = sinePatternPosition < pulseNumOn
-        ? Math.sin(x * pulseFreq * frequencyRatio.sine * 2 * Math.PI)
+        ? Math.sin(x * pulseFreq * pulseClockRatio * 2 * Math.PI)
         : null
 
       // const squarePatternLength = squareBreakPattern.on + squareBreakPattern.off
@@ -85,29 +88,25 @@ export default function WaveformWithClock({
       //   ? Math.sign(Math.sin(x * pulseFreq * frequencyRatio.square * 2 * Math.PI))
       //   : null
 
-      const squareValue = Math.sign(Math.sin(x * pulseFreq * frequencyRatio.square * 2 * Math.PI))
+      const squareValue = Math.sign(Math.sin(x * pulseFreq * 2 * Math.PI))
 
       return { x, sine: sineValue, square: squareValue }
     })
-  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, sineBreakPattern, frequencyRatio])
+  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, sineBreakPattern, pulseClockRatio])
 
   const xAxisDomain = [0, Math.max(
     sineCycles > 0 ? sineCycles / pulseFreq : timeScale,
     squareCycles > 0 ? squareCycles / pulseFreq : timeScale
   )]
 
-  const handleFrequencyRatioChange = (wave: "sine" | "square", value: number) => {
-    setFrequencyRatio(prev => ({ ...prev, [wave]: value }))
-  }
+  // const handleFrequencyRatioChange = (wave: 'sine' | 'square', value: number) => {
+  //   setFrequencyRatio(prev => ({ ...prev, [wave]: value }))
+  // }
+  // const handlePulseClockRatioChange = (val: number) => {
+  //   setPulseClockRatio(val)
+  // }
 
-  const handleBreakPatternChange = (wave: "sine" | "square", type: "on" | "off", value: number) => {
-    setSineBreakPattern(prev => ({ ...prev, [type]: value }))
-  }
-
-  const handlePulseNumOnChange = (value: number) => {
-    return
-  }
-
+  console.log("pulseClockRaio:", pulseClockRatio)
   return (
     <Card>
       <CardHeader>
@@ -193,7 +192,7 @@ export default function WaveformWithClock({
         </div> */}
         <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1}/>
         <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
-        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
+        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setSineCycles} />
 
         {/* <div className="space-y-2">
           <Label htmlFor="sine-break-pattern-on">Break Pattern (On Cycles)</Label>
@@ -216,7 +215,9 @@ export default function WaveformWithClock({
           />
         </div> */}
         <div className="space-y-2">
-          <Label htmlFor="sine-frequency-ratio">Pulse Clock Out Ratio</Label>
+        <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
+
+          {/* <Label htmlFor="sine-frequency-ratio">Pulse Clock Out Ratio</Label>
           <Input
             id="sine-frequency-ratio"
             type="number"
@@ -224,7 +225,7 @@ export default function WaveformWithClock({
             max="10"
             value={frequencyRatio.sine}
             onChange={(e) => handleFrequencyRatioChange("sine", parseInt(e.target.value) || 1)}
-          />
+          /> */}
         </div>
         <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
         {/* </TabsContent> */}
