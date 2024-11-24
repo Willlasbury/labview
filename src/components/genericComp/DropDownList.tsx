@@ -15,11 +15,11 @@ type DropDownListProps = {
   description?: string
   unit?: string
   valueOptions: Array<string>
-  value?: any
+  defaultValue?: any
   setValue: (value: any) => void;
 }
 
-export default function DropdownList({ title, description, unit, valueOptions, setValue }: DropDownListProps) {
+export default function DropdownList({ title, description, unit, defaultValue, valueOptions, setValue }: DropDownListProps) {
   const handleChange = (val: string) => {
     if (Number(val)) {
       return setValue(Number(val))
@@ -35,7 +35,7 @@ export default function DropdownList({ title, description, unit, valueOptions, s
       </TooltipWrapper>
       <Select onValueChange={(value) => handleChange(value)}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder={valueOptions[0]} />
+          <SelectValue placeholder={defaultValue} />
         </SelectTrigger>
         <SelectContent >
           <SelectGroup>

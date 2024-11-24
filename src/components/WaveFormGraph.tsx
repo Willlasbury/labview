@@ -70,12 +70,11 @@ export default function WaveformWithClock({
     })
   }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, pulseClockRatio])
 
-  const xAxisDomain = [0, sineCycles > 0 ? sineCycles / pulseFreq : timeScale]
+  const xAxisDomain = [0, timeScale]
 
 
 
 
-  console.log("pulseClockRaio:", pulseClockRatio)
   return (
     <Card>
       <CardHeader>
@@ -126,10 +125,10 @@ export default function WaveformWithClock({
         </div>
         <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
         <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
-        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
+        {/* <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setPulseGate} /> */}
 
         <div className="space-y-2">
-          <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
+          <DropdownList title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
 
         </div>
         <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
