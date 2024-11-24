@@ -57,27 +57,31 @@ export default function WaveformWithClock({
   const [sineCycles, setSineCycles] = useState(0)
   const [squareCycles, setSquareCycles] = useState(0)
   const [sineYPosition, setSineYPosition] = useState(0)
+  const [pulseWidth, setPulseWidth] = useState(.1);
 
   const generateWaveform = useMemo(() => {
-
-    return Array.from({ length: 400 }, (_, i) => {
-      const x = (i / 399) * timeScale
+    const dataPoints = 10000
+    return Array.from({ length: dataPoints }, (_, i) => {
+      const x = (i / (dataPoints - 1)) * timeScale
 
       const sinePatternLength = pulseNumOn + pulseNumOff
       const sinePatternPosition = Math.floor(x * pulseFreq * pulseClockRatio) % sinePatternLength
-      const sineValue = sinePatternPosition < pulseNumOn
-        ? Math.sin(x * pulseFreq * pulseClockRatio * 2 * Math.PI) + dcOffset
+      const sineActivePeriod = (x % (1 / pulseFreq)) < pulseWidth || 0
+
+      const sinePhaseWithinPeriod = sineActivePeriod ? ((x % (1 / pulseFreq)) / pulseWidth) * (2 * Math.PI) : null
+
+
+      const sineValue = sinePatternPosition < pulseNumOn && sineActivePeriod && sinePhaseWithinPeriod !== null
+        ? Math.sin(sinePhaseWithinPeriod) + sineYPosition
         : null
-            const squareValue = Math.sign(Math.sin(x * pulseFreq * 2 * Math.PI))
+
+      const squareValue = Math.sign(Math.sin(x * pulseFreq * 2 * Math.PI))
 
       return { x, sine: sineValue, square: squareValue }
     })
-  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, pulseClockRatio, dcOffset])
+  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, pulseClockRatio, dcOffset, pulseWidth])
 
   const xAxisDomain = [0, timeScale]
-
-
-  console.log("x, pulseFreq, pulseClockRaio:",  generateWaveform)
 
   return (
     <Card>
@@ -124,7 +128,9 @@ export default function WaveformWithClock({
         {/* CONTROLS */}
         <div className="space-y-2">
           <LabelInput title={"Pulse Frequency"} description="hello" unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
-          <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} />
+          <LabelInput title={"Pulse Period"} description="hello" unit="MHz" value={pulseWidth} setValue={setPulseWidth} />
+          
+          <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} min={-100} max={100} />
         </div>
         <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
         <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />

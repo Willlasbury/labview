@@ -8,7 +8,6 @@ import WaveformWithClock from './components/WaveFormGraph';
 // adjust pulse width to low res pulse width when freq is less than 10MHz
 // Add logic for pulse gate
 // create better edits for pulse freq and period
-// figure out how to work pulse DC offset
 
 
 
