@@ -82,10 +82,9 @@ export default function WaveformWithClock({
     })
   }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, pulseClockRatio])
 
-  const xAxisDomain = [0, Math.max(
-    sineCycles > 0 ? sineCycles / pulseFreq : timeScale,
-    squareCycles > 0 ? squareCycles / pulseFreq : timeScale
-  )]
+  const xAxisDomain = [0,   sineCycles > 0 ? sineCycles / pulseFreq : timeScale]
+   
+  
 
 
   console.log("pulseClockRaio:", pulseClockRatio)
@@ -141,7 +140,7 @@ export default function WaveformWithClock({
         </div>
         <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1}/>
         <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
-        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setSineCycles} />
+        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
 
         <div className="space-y-2">
         <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
