@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LabelInput from "@/components/genericComp/LabelInput"
 import { DropdownList } from "@/components/genericComp/DropDownList";
-import { fakeData } from "@/utils/fakeData";
+import { fakeData } from "@/utils/constantData";
 import { OnOffButton } from "@/components/genericComp/OnOffToggle";
 import { ScrollAreaList } from "@/components/genericComp/ScollAreaList";
 import Counter from "@/components/genericComp/Counter";

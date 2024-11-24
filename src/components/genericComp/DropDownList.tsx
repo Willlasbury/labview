@@ -19,7 +19,7 @@ type DropDownListProps = {
   setValue: (value: any) => void;
 }
 
-export function DropdownList({ title, description, unit, valueOptions, setValue }: DropDownListProps) {
+export default function DropdownList({ title, description, unit, valueOptions, setValue }: DropDownListProps) {
   const handleChange = (val: string) => {
     if (Number(val)) {
       return setValue(Number(val))

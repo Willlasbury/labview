@@ -10,6 +10,9 @@ import { Input } from "@/components/ui/input"
 import { OnOffButton } from "./genericComp/OnOffToggle"
 
 import Counter from "./genericComp/Counter"
+import DropdownList  from "./genericComp/DropDownList"
+import LabelInput from "./genericComp/LabelInput"
+import { constantData } from "@/utils/constantData"
 
 interface WaveformWithClockProps {
   pulseFreq: number
@@ -22,6 +25,8 @@ interface WaveformWithClockProps {
   setPulseNumOn: (num: number) => void
   pulseNumOff: number
   setPulseNumOff: (num: number) => void
+  pulseGate: string
+  setPulseGate: (str: string) => void
   
   // period: number
   // setPeriod: (period: number) => void
@@ -42,6 +47,8 @@ export default function WaveformWithClock({
   setPulseNumOn,
   pulseNumOff,
   setPulseNumOff,
+  pulseGate,
+  setPulseGate,
   // period,
   // setPeriod,
 
@@ -154,7 +161,9 @@ export default function WaveformWithClock({
           </TabsList>
           <TabsContent value="sine" className="space-y-4"> */}
         <div className="space-y-2">
-          <Label htmlFor="sine-frequency-slider">Frequency: {pulseFreq.toFixed(2)} Hz</Label>
+        <LabelInput title={"Pulse Frequency"} description="hello" unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
+
+          {/* <Label htmlFor="sine-frequency-slider">Frequency: {pulseFreq.toFixed(2)} Hz</Label>
           <Slider
             id="sine-frequency-slider"
             min={0.1}
@@ -162,9 +171,9 @@ export default function WaveformWithClock({
             step={0.1}
             value={[pulseFreq]}
             onValueChange={(value) => setPulseFreq(value[0])}
-          />
+          /> */}
         </div>
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label htmlFor="sine-cycles-select">Number of Cycles</Label>
           <Select
             value={sineCycles.toString()}
@@ -181,9 +190,11 @@ export default function WaveformWithClock({
               <SelectItem value="10">10 Cycles</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-        <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} />
+        </div> */}
+        <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1}/>
         <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
+        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
+
         {/* <div className="space-y-2">
           <Label htmlFor="sine-break-pattern-on">Break Pattern (On Cycles)</Label>
           <Input

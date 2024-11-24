@@ -13,7 +13,7 @@ export type fakeDataObj = {
     period: subObjData
 }
 
-export const fakeData: fakeDataObj = {
+export const constantData: fakeDataObj = {
      pulseWidth : { array : Array.from({length: 15}).map((_,i)=>`${i + 1}`), unit: '-9' },
      lowResPulseWidth : { array : Array.from({length: 15}).map((_,i)=>`${(i + 1)*Math.random()}`), unit: '-9' },
      lowResPulseDC : { array : Array.from({length: 15}).map((_,i)=>`${(i + 1)*Math.random()}`), unit: '-9' },

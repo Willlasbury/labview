@@ -5,7 +5,7 @@ import { usePulseFreq } from './hooks/usePulseFreq';
 import  CommandWindow  from './pages/CommandWindow';
 import { SessionLog } from './pages/SessionLog';
 import { SideNavigationComponent } from './components/genericComp/Navigation';
-import { fakeData } from './utils/fakeData';
+import { constantData } from './utils/constantData';
 import WaveformWithClock from './components/WaveFormGraph';
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
   const [pulseLock, setPulseLock] = useState<boolean>(true);
   const [pulseNumOn, setPulseNumOn] = useState<number>(1)
   const [pulseNumOff, setPulseNumOff] = useState<number>(0);
-  // const [pulseGate, setPulseGate] = useState<string>(fakeData.pulseGate.array[0]);
+  const [pulseGate, setPulseGate] = useState<string>(constantData.pulseGate.array[0]);
   // const [pulseNumOn, setPulseNumOn] = useState<number>(1);
   // const [pulseNumOff, setPulseNumOff] = useState<number>(1);
   // const [outPutEnabled, setOutPutEnabled] = useState<boolean>(false);
@@ -55,7 +55,8 @@ function App() {
         setPulseNumOn={setPulseNumOn}
         pulseNumOff={pulseNumOff}
         setPulseNumOff={setPulseNumOff}
-        
+        pulseGate={pulseGate}
+        setPulseGate={setPulseGate}
         
         // period={period}
         // setPeriod={setPeriod}

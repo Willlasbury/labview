@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/components/subComp/scroll-area"
 import { Separator } from "@/components/subComp/separator"
-import type { subObjData  } from "@/utils/fakeData"
+import type { subObjData  } from "@/utils/constantData"
 
 type ScrollAreaProps = {
   title: string,
