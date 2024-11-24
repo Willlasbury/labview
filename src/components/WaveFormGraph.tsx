@@ -63,8 +63,12 @@ export default function WaveformWithClock({
     return Array.from({ length: 400 }, (_, i) => {
       const x = (i / 399) * timeScale
 
-      const sineValue = Math.sin(x * pulseFreq * pulseClockRatio * 2 * Math.PI) + dcOffset
-      const squareValue = Math.sign(Math.sin(x * pulseFreq * 2 * Math.PI))
+      const sinePatternLength = pulseNumOn + pulseNumOff
+      const sinePatternPosition = Math.floor(x * pulseFreq * pulseClockRatio) % sinePatternLength
+      const sineValue = sinePatternPosition < pulseNumOn
+        ? Math.sin(x * pulseFreq * pulseClockRatio * 2 * Math.PI) + dcOffset
+        : null
+            const squareValue = Math.sign(Math.sin(x * pulseFreq * 2 * Math.PI))
 
       return { x, sine: sineValue, square: squareValue }
     })
@@ -73,6 +77,7 @@ export default function WaveformWithClock({
   const xAxisDomain = [0, timeScale]
 
 
+  console.log("x, pulseFreq, pulseClockRaio:",  generateWaveform)
 
   return (
     <Card>
