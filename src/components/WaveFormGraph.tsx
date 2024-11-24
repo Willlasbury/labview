@@ -29,9 +29,7 @@ interface WaveformWithClockProps {
   setPulseGate: (str: string) => void
   pulseClockRatio: number
   setPulseClockRatio: (num: number) => void  
-  // period: number
-  // setPeriod: (period: number) => void
-  initialTimeScale?: number
+  
   initialSineCycles?: number
   initialSquareCycles?: number
   initialSineBreakPattern?: { on: number; off: number }
@@ -55,13 +53,12 @@ export default function WaveformWithClock({
   // period,
   // setPeriod,
 
-  initialTimeScale = 10,
   initialSineCycles = 0,
   initialSquareCycles = 0,
   initialSineBreakPattern = { on: 3, off: 1 },
   title = "Waveform with Independent Clock Output"
 }: WaveformWithClockProps) {
-  const [timeScale, setTimeScale] = useState(initialTimeScale)
+  const [timeScale, setTimeScale] = useState(10)
   const [sineCycles, setSineCycles] = useState(initialSineCycles)
   const [squareCycles, setSquareCycles] = useState(initialSquareCycles)
   const [sineBreakPattern, setSineBreakPattern] = useState(initialSineBreakPattern)
