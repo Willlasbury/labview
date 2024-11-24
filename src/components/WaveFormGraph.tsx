@@ -54,9 +54,12 @@ export default function WaveformWithClock({
 
 }: WaveformWithClockProps) {
   const [timeScale, setTimeScale] = useState(10)
-  const [squareCycles, setSquareCycles] = useState(0)
-  const [sineYPosition, setSineYPosition] = useState(0)
-  const [pulseWidth, setPulseWidth] = useState(.1);
+  const [pulseWidth, setPulseWidth] = useState(pulseFreq);
+  // const [sinePeriod, setSinePeriod] = useState<number>(pulseFreq);
+
+  const handleDutyCycle = (val: number) => {
+    setPulseWidth(val/100)
+  }
 
   const generateWaveform = useMemo(() => {
     const dataPoints = 10000
@@ -78,7 +81,7 @@ export default function WaveformWithClock({
 
       return { x, sine: sineValue, square: squareValue }
     })
-  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, squareCycles, pulseClockRatio, dcOffset, pulseWidth])
+  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, pulseClockRatio, dcOffset, pulseWidth])
 
   const xAxisDomain = [0, timeScale]
 
@@ -126,9 +129,9 @@ export default function WaveformWithClock({
 
         {/* CONTROLS */}
         <div className="space-y-2">
-          <LabelInput title={"Pulse Frequency"} description="hello" unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
+          <LabelInput title={"Pulse Period"} description="hello" unit="s" value={pulseFreq} setValue={setPulseFreq} />
           <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
-          <LabelInput title={"Pulse Period"} description="hello" unit="MHz" value={pulseWidth} setValue={setPulseWidth} />
+          <Counter title={"Duty Cycle"} unit="%" min={0} max={100} step={1} value={pulseWidth * 100} setValue={handleDutyCycle} />
 
           <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} min={-100} max={100} />
         </div>
