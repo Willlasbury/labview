@@ -20,6 +20,8 @@ interface WaveformWithClockProps {
   setPulseFreq: (pulseFreq: number) => void
   pulseLock: boolean
   setPulseLock: (bool: boolean) => void
+  dcOffset: number
+  setDcOffset: (num: number) => void
   pulseWidth: number
   setPulseWidth: (num: number) => void
   pulseNumOn: number
@@ -39,6 +41,8 @@ export default function WaveformWithClock({
   setPulseFreq,
   pulseLock,
   setPulseLock,
+  dcOffset,
+  setDcOffset,
   pulseNumOn,
   setPulseNumOn,
   pulseNumOff,
@@ -52,26 +56,21 @@ export default function WaveformWithClock({
   const [timeScale, setTimeScale] = useState(10)
   const [sineCycles, setSineCycles] = useState(0)
   const [squareCycles, setSquareCycles] = useState(0)
+  const [sineYPosition, setSineYPosition] = useState(0)
 
   const generateWaveform = useMemo(() => {
 
     return Array.from({ length: 400 }, (_, i) => {
       const x = (i / 399) * timeScale
 
-      const sinePatternLength = pulseNumOn + pulseNumOff
-      const sinePatternPosition = Math.floor(x * pulseFreq * pulseClockRatio) % sinePatternLength
-      const sineValue = sinePatternPosition < pulseNumOn
-        ? Math.sin(x * pulseFreq * pulseClockRatio * 2 * Math.PI)
-        : null
-
+      const sineValue = Math.sin(x * pulseFreq * pulseClockRatio * 2 * Math.PI) + dcOffset
       const squareValue = Math.sign(Math.sin(x * pulseFreq * 2 * Math.PI))
 
       return { x, sine: sineValue, square: squareValue }
     })
-  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, pulseClockRatio])
+  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, pulseClockRatio, dcOffset])
 
   const xAxisDomain = [0, timeScale]
-
 
 
 
@@ -93,8 +92,7 @@ export default function WaveformWithClock({
                 tickFormatter={(value) => value.toFixed(2)}
                 label={{ value: "Time (s)", position: "insideBottomRight", offset: -5 }}
               />
-              <YAxis domain={[-1.1, 1.1]} />
-              {/* <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" /> */}
+              <YAxis domain={[dcOffset - 1.1, dcOffset + 1.1]} />
               <Line
                 type="monotone"
                 dataKey="sine"
@@ -121,11 +119,11 @@ export default function WaveformWithClock({
         {/* CONTROLS */}
         <div className="space-y-2">
           <LabelInput title={"Pulse Frequency"} description="hello" unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
-
+          <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} />
         </div>
         <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
         <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
-        {/* <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setPulseGate} /> */}
+        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} defaultValue={pulseGate} setValue={setPulseGate} />
 
         <div className="space-y-2">
           <DropdownList title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />

@@ -22,6 +22,7 @@ function App() {
   const [pulseNumOff, setPulseNumOff] = useState<number>(0);
   const [pulseGate, setPulseGate] = useState<string>(constantData.pulseGate.array[0]);
   const [pulseClockRatio, setPulseClockRatio] = useState<number>(1);
+  const [dcOffset, setDcOffset] = useState(0);
 
   return (
     <>
@@ -31,6 +32,8 @@ function App() {
         setPulseFreq={setPulseFreq}
         pulseWidth={pulseWidth}
         setPulseWidth={setPulseWidth}
+        dcOffset={dcOffset}
+        setDcOffset={setDcOffset}
         pulseLock={pulseLock}
         setPulseLock={setPulseLock}
         pulseNumOn={pulseNumOn}
