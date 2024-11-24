@@ -26,7 +26,7 @@ function App() {
   return (
     <>
       <WaveformWithClock 
-        title="" 
+        // title="" 
         pulseFreq={pulseFreq}
         setPulseFreq={setPulseFreq}
         pulseWidth={pulseWidth}

@@ -10,11 +10,12 @@ import { Input } from "@/components/ui/input"
 import { OnOffButton } from "./genericComp/OnOffToggle"
 
 import Counter from "./genericComp/Counter"
-import DropdownList  from "./genericComp/DropDownList"
+import DropdownList from "./genericComp/DropDownList"
 import LabelInput from "./genericComp/LabelInput"
 import { constantData } from "@/utils/constantData"
 
 interface WaveformWithClockProps {
+  title?: string
   pulseFreq: number
   setPulseFreq: (pulseFreq: number) => void
   pulseLock: boolean
@@ -28,16 +29,12 @@ interface WaveformWithClockProps {
   pulseGate: string
   setPulseGate: (str: string) => void
   pulseClockRatio: number
-  setPulseClockRatio: (num: number) => void  
-  
-  initialSineCycles?: number
-  initialSquareCycles?: number
-  initialSineBreakPattern?: { on: number; off: number }
-  initialSquareBreakPattern?: { on: number; off: number }
-  title?: string
+  setPulseClockRatio: (num: number) => void
+
 }
 
 export default function WaveformWithClock({
+  title,
   pulseFreq,
   setPulseFreq,
   pulseLock,
@@ -48,19 +45,13 @@ export default function WaveformWithClock({
   setPulseNumOff,
   pulseGate,
   setPulseGate,
-  pulseClockRatio=1,
+  pulseClockRatio = 1,
   setPulseClockRatio,
-  // period,
-  // setPeriod,
 
-  initialSineBreakPattern = { on: 3, off: 1 },
-  title = "Waveform with Independent Clock Output"
 }: WaveformWithClockProps) {
   const [timeScale, setTimeScale] = useState(10)
   const [sineCycles, setSineCycles] = useState(0)
   const [squareCycles, setSquareCycles] = useState(0)
-  const [showSquareWave, setShowSquareWave] = useState(true)
-  const [frequencyRatio, setFrequencyRatio] = useState({ sine: 0.5, square: 1 })
 
   const generateWaveform = useMemo(() => {
 
@@ -79,9 +70,9 @@ export default function WaveformWithClock({
     })
   }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, pulseClockRatio])
 
-  const xAxisDomain = [0,   sineCycles > 0 ? sineCycles / pulseFreq : timeScale]
-   
-  
+  const xAxisDomain = [0, sineCycles > 0 ? sineCycles / pulseFreq : timeScale]
+
+
 
 
   console.log("pulseClockRaio:", pulseClockRatio)
@@ -104,7 +95,7 @@ export default function WaveformWithClock({
                 label={{ value: "Time (s)", position: "insideBottomRight", offset: -5 }}
               />
               <YAxis domain={[-1.1, 1.1]} />
-              <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" />
+              {/* <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" /> */}
               <Line
                 type="monotone"
                 dataKey="sine"
@@ -114,33 +105,31 @@ export default function WaveformWithClock({
                 name="Sine Wave"
                 connectNulls={false}
               />
-              {showSquareWave && (
-                <Line
-                  type="stepAfter"
-                  dataKey="square"
-                  stroke='blue'
-                  dot={false}
-                  isAnimationActive={false}
-                  strokeWidth={2}
-                  name="Square Wave (Clock)"
-                  connectNulls={false}
-                />
-              )}
+              <Line
+                type="stepAfter"
+                dataKey="square"
+                stroke='blue'
+                dot={false}
+                isAnimationActive={false}
+                strokeWidth={2}
+                name="Square Wave (Clock)"
+                connectNulls={false}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         {/* CONTROLS */}
         <div className="space-y-2">
-        <LabelInput title={"Pulse Frequency"} description="hello" unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
+          <LabelInput title={"Pulse Frequency"} description="hello" unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
 
         </div>
-        <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1}/>
+        <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
         <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
         <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} value={pulseGate} setValue={setPulseGate} />
 
         <div className="space-y-2">
-        <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
+          <DropdownList title={"Pulse to Clock Out Ratio"} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
 
         </div>
         <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
