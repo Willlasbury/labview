@@ -54,7 +54,6 @@ export default function WaveformWithClock({
 
 }: WaveformWithClockProps) {
   const [timeScale, setTimeScale] = useState(10)
-  const [sineCycles, setSineCycles] = useState(0)
   const [squareCycles, setSquareCycles] = useState(0)
   const [sineYPosition, setSineYPosition] = useState(0)
   const [pulseWidth, setPulseWidth] = useState(.1);
@@ -72,14 +71,14 @@ export default function WaveformWithClock({
 
 
       const sineValue = sinePatternPosition < pulseNumOn && sineActivePeriod && sinePhaseWithinPeriod !== null
-        ? Math.sin(sinePhaseWithinPeriod) + sineYPosition
+        ? Math.sin(sinePhaseWithinPeriod) + dcOffset
         : null
 
       const squareValue = Math.sign(Math.sin(x * pulseFreq * 2 * Math.PI))
 
       return { x, sine: sineValue, square: squareValue }
     })
-  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, sineCycles, squareCycles, pulseClockRatio, dcOffset, pulseWidth])
+  }, [pulseFreq, pulseNumOn, pulseNumOff, timeScale, squareCycles, pulseClockRatio, dcOffset, pulseWidth])
 
   const xAxisDomain = [0, timeScale]
 
@@ -128,8 +127,9 @@ export default function WaveformWithClock({
         {/* CONTROLS */}
         <div className="space-y-2">
           <LabelInput title={"Pulse Frequency"} description="hello" unit="MHz" value={pulseFreq} setValue={setPulseFreq} />
+          <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
           <LabelInput title={"Pulse Period"} description="hello" unit="MHz" value={pulseWidth} setValue={setPulseWidth} />
-          
+
           <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} min={-100} max={100} />
         </div>
         <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
@@ -140,7 +140,6 @@ export default function WaveformWithClock({
           <DropdownList title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
 
         </div>
-        <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
       </CardContent>
     </Card>
   )
