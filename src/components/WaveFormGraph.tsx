@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/subComp/card"
-import { OnOffButton } from "./genericComp/OnOffToggle"
 import { TabComponent } from "./genericComp/TabComp"
+import { cn } from "@/lib/utils"
 
 import Counter from "./genericComp/Counter"
 import DropdownList from "./genericComp/DropDownList"
@@ -151,33 +151,55 @@ export default function WaveformWithClock({
           </ResponsiveContainer>
         </div>
 
+
         {/* CONTROLS */}
+        <div className="flex flex-row flex-wrap justify-evenly">
 
-        {/* Adjust the Clock frequency aka blue/square line */}
-        <div className="space-y-2">
-          <TabComponent
-            content={[
-              { title: 'Frequency', comp: <LabelInput title={"Frequency"} description="hello" min={1} value={1 / clockPeriod} setValue={(val) => handleClockPeriod(1 / val)} /> },
-              { title: 'Period', comp: <LabelInput title={"Period"} description="hello" min={1} value={clockPeriod} setValue={handleClockPeriod} /> }
-            ]}
-          />
-        </div>
+          {/* Adjust the Clock frequency aka blue/square line */}
+          <div className={cn("flex space-y-2 m-2 w-1/4 max-h-36",
+          "lg:w-1/4",
+          "md:w-5/12",
+          "max-sm:w-full max-sm:min-w-full"
+            
+          )}>
+            <TabComponent
+              title={'Clock Settings'}
+              content={[
+                { title: 'Frequency', comp: <LabelInput title={"Frequency"} description="hello" min={1} value={1 / clockPeriod} setValue={(val) => handleClockPeriod(1 / val)} /> },
+                { title: 'Period', comp: <LabelInput title={"Period"} description="hello" min={1} value={clockPeriod} setValue={handleClockPeriod} /> }
+              ]}
+            />
+          </div>
 
-        {/* handle the period of the pulse wave through either the specifying the period or as a fraction of the clock period*/}
-        <div>
-          <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
-          <Counter title={"Duty Cycle"} unit="%" min={0} max={100} step={1} value={(pulseWidth / clockPeriod) * 100} setValue={handleDutyCycle} />
-          <LabelInput title={"Pulse Width"} description="hello" unit="s" min={0} max={clockPeriod} step={0.01} value={pulseWidth} setValue={setPulseWidth} />
-        </div>
+          {/* handle the period of the pulse wave through either the specifying the period or as a fraction of the clock period*/}
+          <div className={cn("flex space-y-2 m-2 w-1/3 max-h-36",
+           "lg:w-1/4",
+          "md:w-5/12",
+          "max-sm:w-full max-sm:min-w-full"
+            
+          )}>
+            <TabComponent
+            title={'Pulse Settings'}
+              content={[
 
-        <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} min={-100} max={100} />
-        <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
-        <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
-        <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} defaultValue={pulseGate} setValue={setPulseGate} />
+                // <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
+                { title: 'Duty Cycle', comp: <Counter title={"Duty Cycle"} unit="%" min={0} max={100} step={1} value={(pulseWidth / clockPeriod) * 100} setValue={handleDutyCycle} /> },
+                { title: 'PulseWidth', comp: <LabelInput title={"Pulse Width"} description="hello" unit="s" min={0} max={clockPeriod} step={0.01} value={pulseWidth} setValue={setPulseWidth} /> }
+              ]} />
+          </div>
 
-        <div className="space-y-2">
-          <DropdownList title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
 
+          <div>
+          <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} defaultValue={pulseGate} setValue={setPulseGate} />
+          <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} min={-100} max={100} />
+          <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
+          <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
+          </div>
+
+          <div className="space-y-2">
+            <DropdownList title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
+
+          </div>
         </div>
       </CardContent>
     </Card>

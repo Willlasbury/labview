@@ -25,8 +25,8 @@ export default function Counter({ title, unit, min = 0, max = 10, step = 1, valu
         setValue(num)
     }
     return (
-        <div className="w-full mt-4 bg-slate-600 rounded-md py-1 px-2 max-w-96">
-            <h4 className='text-center text-lg font-semibold'>{title}{unit && ` (${unit})`}:  <span className="text-xl font-bold">{value}</span></h4>
+        <div className="w-full rounded-md py-1 px-2 max-w-96">
+            <h4 className='text-center text-lg font-semibold'>{title}{unit && ` (${unit})`}:  <span className="text-xl font-bold">{Math.round(value)}</span></h4>
             <div className="flex items-center justify-between">
                 <Button
                     className="h-8 w-8"
@@ -40,7 +40,7 @@ export default function Counter({ title, unit, min = 0, max = 10, step = 1, valu
                 <div className='flex flex-col items-center w-full'>
                     <div className={`z-10 w-11/12 transition-opacity duration-300`}>
                         <Slider.Root
-                            className="relative flex items-center select-none touch-none w-full h-5 bg-slate-500 rounded-md"
+                            className="relative flex items-center select-none touch-none w-full h-5 bg-slate-300 rounded-md"
                             value={[value]}
                             onValueChange={(newValue: Array<number>) => { setValue(newValue[0]) }}
                             max={max}

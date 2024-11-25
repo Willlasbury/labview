@@ -1,26 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { cn } from "@/lib/utils"
 
 interface TabComponentProps {
+    title: string
     content: Array<{
         title: string
         comp: React.ReactNode
     }>
 }
 export function TabComponent({
+    title,
     content
 }: TabComponentProps) {
+
+    const [isActive, setIsActive] = useState<string>(content[0].title);
+
     return (
-        <Tabs.Root defaultValue={content[0].title} className="w-1/4 max-w-3xl mx-auto border-solid border-slate-200 border-2 rounded-md shadow-sm">
+        <Tabs.Root defaultValue={content[0].title}
+            className={cn("w-full border-solid border-slate-200 border-2 rounded-md shadow-sm",
+
+            )}>
             <Tabs.List className={cn(
                 "flex items-center",
-                "p-2",
-                "bg-slate-200 border-b border-gray-200 mb-4"
+                "p-2 mb-1",
+                "bg-slate-200 border-b border-gray-200"
             )}
             >
                 <h4 className='text-xl font-semibold'>
-                    Clock Settings
+                    {title}
                 </h4>
                 {content.map(({ title }) => {
                     return (
@@ -31,7 +39,7 @@ export function TabComponent({
                                 "mx-2 px-4 py-2 bg-slate-300 text-sm font-semibold text-slate-700 hover:text-gray-700 focus:outline-none focus:text-gray-200 focus:border-gray-200  focus:bg-gray-500",
                                 "radix-state-active:border-b-2 radix-state-active:border-primary radix-state-active:text-primary",
                                 "relative",
-                                "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-green-300",
+                                "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5",
                                 "after:scale-x-0 after:transition-transform after:duration-300",
                                 "radix-state-active:after:scale-x-100"
                             )}
@@ -43,7 +51,7 @@ export function TabComponent({
             </Tabs.List>
             {content.map(({ title, comp }) => {
                 return (
-                    <Tabs.Content key={`comp ${title}`} value={title} className="focus:outline-none">
+                    <Tabs.Content key={`comp ${title}`} value={title} className="flex justify-center focus:outline-none ">
                         {comp}
                     </Tabs.Content>
                 )
