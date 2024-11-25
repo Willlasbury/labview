@@ -1,3 +1,4 @@
+"use client";
 import './App.css'
 import { useState } from 'react';
 import { constantData } from './utils/constantData';
@@ -12,8 +13,7 @@ import WaveformWithClock from './components/WaveFormGraph';
 // create pulse clock ratio
 
 
-
-
+;
 function App() {
   const [clockPeriod, setClockPeriod] = useState<number>(1);
   const [pulseWidth, setPulseWidth] = useState<number>(1);
