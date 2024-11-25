@@ -16,7 +16,6 @@ import WaveformWithClock from './components/WaveFormGraph';
 
 function App() {
   const [clockPeriod, setClockPeriod] = useState<number>(1);
-  const [pulseFreq, setPulseFreq] = useState<number>(1);
   const [pulseWidth, setPulseWidth] = useState<number>(1);
   const [pulseLock, setPulseLock] = useState<boolean>(true);
   const [pulseNumOn, setPulseNumOn] = useState<number>(1)
@@ -32,8 +31,6 @@ function App() {
         // add new freq and put it into the squareValue to handle the master freq
         clockPeriod={clockPeriod}
         setClockPeriod={setClockPeriod}
-        pulseFreq={pulseFreq}
-        setPulseFreq={setPulseFreq}
         pulseWidth={pulseWidth}
         setPulseWidth={setPulseWidth}
         dcOffset={dcOffset}

@@ -18,7 +18,7 @@ export function TabComponent({
 
     return (
         <Tabs.Root defaultValue={content[0].title}
-            className={cn("w-full border-solid border-slate-200 border-2 rounded-md shadow-sm",
+            className={cn("w-full h-fit border-solid border-slate-200 border-2 rounded-md shadow-sm",
 
             )}>
             <Tabs.List className={cn(
