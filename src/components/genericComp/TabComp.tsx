@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { cn } from "@/lib/utils"
 
@@ -13,8 +13,6 @@ export function TabComponent({
     title,
     content
 }: TabComponentProps) {
-
-    const [isActive, setIsActive] = useState<string>(content[0].title);
 
     return (
         <Tabs.Root defaultValue={content[0].title}

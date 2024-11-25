@@ -13,10 +13,8 @@ import { Separator } from "@/components/subComp/separator"
 import { Sheet, SheetContent } from "@/components/subComp/sheet"
 import { Skeleton } from "@/components/subComp/skeleton"
 import {
-  Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
 } from "@/components/subComp/tooltip"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"

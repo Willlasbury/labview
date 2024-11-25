@@ -5,11 +5,10 @@ import type { subObjData  } from "@/utils/constantData"
 type ScrollAreaProps = {
   title: string,
   valueOptions: subObjData
-  value: string
   setValue: (value: string) => void
 }
 
-export function ScrollAreaList({ title, valueOptions, value, setValue }: ScrollAreaProps) {
+export function ScrollAreaList({ title, valueOptions, setValue }: ScrollAreaProps) {
   
   return (
     <section>
