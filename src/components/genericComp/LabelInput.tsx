@@ -25,16 +25,16 @@ export default function LabelInput({
   value,
   setValue,
 }: InputProps) {
-  console.log("pulseWidth:", title, value)
+
   return (
     <div className="flex flex-row mb-1 md:max-w-96">
       <TooltipWrapper text={description}>
-        <Label htmlFor={title} className="text-slate-700">
-          {title} {unit && `(${unit})`}
+        <Label htmlFor={title} className="text-slate-700 px-2 pb-1 text-lg font-semibold">
+          {title}{unit && ` (${unit})`}:
         </Label>
       </TooltipWrapper>
       <Input
-        type={typeof value}
+        type={'number'}
         id={title}
         value={value}
         max={max}

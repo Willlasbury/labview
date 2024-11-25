@@ -1,13 +1,8 @@
-import React, { useState, useMemo, Dispatch } from "react"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine } from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Slider } from "@/components/ui/slider"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
+import { useState, useMemo } from "react"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/subComp/card"
 import { OnOffButton } from "./genericComp/OnOffToggle"
+import { TabComponent } from "./genericComp/TabComp"
 
 import Counter from "./genericComp/Counter"
 import DropdownList from "./genericComp/DropDownList"
@@ -16,8 +11,8 @@ import { constantData } from "@/utils/constantData"
 
 interface WaveformWithClockProps {
   title?: string
-  masterPeriod: number
-  setMasterPeriod: (masterPeriod: number) => void
+  clockPeriod: number
+  setClockPeriod: (clockPeriod: number) => void
   pulseFreq: number
   setPulseFreq: (pulseFreq: number) => void
   pulseLock: boolean
@@ -39,8 +34,8 @@ interface WaveformWithClockProps {
 
 export default function WaveformWithClock({
   title,
-  masterPeriod,
-  setMasterPeriod,
+  clockPeriod,
+  setClockPeriod,
   pulseFreq,
   setPulseFreq,
   pulseLock,
@@ -57,47 +52,63 @@ export default function WaveformWithClock({
   setPulseClockRatio,
 
 }: WaveformWithClockProps) {
+  // Sets the time scale for the x axis on the graph and is used in creating data points
   const [timeScale, setTimeScale] = useState(10)
+  // Controls the pulse width and sets it at the clockPeriod to start 
+  const [pulseWidth, setPulseWidth] = useState(clockPeriod);
 
-
-  // this is currently acting as pulse width 
-  const [pulseWidth, setPulseWidth] = useState(masterPeriod);
-  
   const generateWaveform = useMemo(() => {
     const dataPoints = 10000
     return Array.from({ length: dataPoints }, (_, i) => {
       const x = (i / (dataPoints - 1)) * timeScale
-      
+
       const sinePatternLength = pulseNumOn + pulseNumOff
       const sinePatternPosition = Math.floor(x * pulseFreq * pulseClockRatio) % sinePatternLength
       const sineActivePeriod = (x % (1 / pulseFreq)) < pulseWidth
-      
-      const sinePhaseWithinPeriod = sineActivePeriod ? ((x % (masterPeriod)) / pulseWidth) * (2 * Math.PI) : null
-      
-      
+
+      const sinePhaseWithinPeriod = sineActivePeriod ? ((x % (clockPeriod)) / pulseWidth) * (2 * Math.PI) : null
+
+
       const sineValue = sinePatternPosition < pulseNumOn && sineActivePeriod && sinePhaseWithinPeriod !== null
-      ? Math.sin(sinePhaseWithinPeriod) + dcOffset
-      : null
-      
-      const squareValue = Math.sign(Math.sin(x * 1/masterPeriod * 2 * Math.PI))
-      
+        ? Math.sin(sinePhaseWithinPeriod) + dcOffset
+        : null
+
+      const squareValue = Math.sign(Math.sin(x * 1 / clockPeriod * 2 * Math.PI))
+
       return { x, sine: sineValue, square: squareValue }
     })
-  }, [masterPeriod, pulseFreq, pulseNumOn, pulseNumOff, timeScale, pulseClockRatio, dcOffset, pulseWidth])
-  
+  }, [clockPeriod, pulseFreq, pulseNumOn, pulseNumOff, timeScale, pulseClockRatio, dcOffset, pulseWidth])
+
   const xAxisDomain = [0, timeScale]
-  
+
   const handleDutyCycle = (val: number) => {
-    setPulseWidth(masterPeriod * val/100)
+    setPulseWidth(clockPeriod * val / 100)
   }
 
-  const handleMasterPeriod = (val: number) => {
+  const handleClockPeriod = (val: number) => {
+    // keep the time scale moving with increases in the clock
+    if (val > timeScale) {
+      setTimeScale(val)
+    }
+    // make sure the clock doesn't stay massive if we decrease the clock width
+    if (val < (timeScale / 10)) {
+      setTimeScale(10 * val)
+    }
+    // make sure the pulse width can never be shorter than the clock width
     if (val < pulseWidth) {
       setPulseWidth(val)
     }
-    setMasterPeriod(val)
+    setClockPeriod(val)
   }
-  console.log("pulseWidth:", pulseWidth)
+
+  // const handleMasterFreq = (val: number) => {
+  //   const freq = 1/val
+  //   if (freq < (pulseWidth)) {
+  //     setPulseWidth(1/freq)
+  //   }
+  //   setClockPeriod(1/freq)
+  // }
+
   return (
     <Card>
       <CardHeader>
@@ -141,17 +152,25 @@ export default function WaveformWithClock({
         </div>
 
         {/* CONTROLS */}
+
+        {/* Adjust the Clock frequency aka blue/square line */}
         <div className="space-y-2">
-          {/* grab the to be made master freq and create a component to and flip it adjust period this should then
-          go back to adjust the squareValue component */}
-          <LabelInput title={"Clock Period"} description="hello" unit="s" value={masterPeriod} setValue={handleMasterPeriod} />
-          {/* <LabelInput title={"Pulse Period"} description="hello" unit="s" value={pulseFreq} setValue={setPulseFreq} /> */}
-          <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
-          <Counter title={"Duty Cycle"} unit="%" min={0} max={100} step={1} value={ (pulseWidth / masterPeriod) * 100 } setValue={handleDutyCycle} />
-          <LabelInput title={"Pulse Width"} description="hello" unit="s" min={0} max={masterPeriod} step={0.01} value={pulseWidth} setValue={setPulseWidth} />
-            
-          <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} min={-100} max={100} />
+          <TabComponent
+            content={[
+              { title: 'Frequency', comp: <LabelInput title={"Frequency"} description="hello" min={1} value={1 / clockPeriod} setValue={(val) => handleClockPeriod(1 / val)} /> },
+              { title: 'Period', comp: <LabelInput title={"Period"} description="hello" min={1} value={clockPeriod} setValue={handleClockPeriod} /> }
+            ]}
+          />
         </div>
+
+        {/* handle the period of the pulse wave through either the specifying the period or as a fraction of the clock period*/}
+        <div>
+          <OnOffButton title={["Pulse Lock", "Duty Cycle Lock"]} value={pulseLock} setValue={setPulseLock} />
+          <Counter title={"Duty Cycle"} unit="%" min={0} max={100} step={1} value={(pulseWidth / clockPeriod) * 100} setValue={handleDutyCycle} />
+          <LabelInput title={"Pulse Width"} description="hello" unit="s" min={0} max={clockPeriod} step={0.01} value={pulseWidth} setValue={setPulseWidth} />
+        </div>
+
+        <Counter title="DC Offset" value={dcOffset} setValue={setDcOffset} min={-100} max={100} />
         <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
         <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
         <DropdownList title={"Pulse Gate"} description={'some text'} valueOptions={constantData.pulseGate.array} defaultValue={pulseGate} setValue={setPulseGate} />

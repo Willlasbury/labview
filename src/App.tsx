@@ -5,15 +5,17 @@ import WaveformWithClock from './components/WaveFormGraph';
 
 
 // TODOS
-// adjust pulse width to low res pulse width when freq is less than 10MHz
 // Add logic for pulse gate
+// adjust pulse width to low res pulse width when freq is less than 10MHz
 // create better edits for pulse freq and period
+// create feedback log
+// create pulse clock ratio
 
 
 
 
 function App() {
-  const [masterPeriod, setMasterPeriod] = useState<number>(1);
+  const [clockPeriod, setClockPeriod] = useState<number>(1);
   const [pulseFreq, setPulseFreq] = useState<number>(1);
   const [pulseWidth, setPulseWidth] = useState<number>(1);
   const [pulseLock, setPulseLock] = useState<boolean>(true);
@@ -28,8 +30,8 @@ function App() {
       <WaveformWithClock 
         // title="" 
         // add new freq and put it into the squareValue to handle the master freq
-        masterPeriod={masterPeriod}
-        setMasterPeriod={setMasterPeriod}
+        clockPeriod={clockPeriod}
+        setClockPeriod={setClockPeriod}
         pulseFreq={pulseFreq}
         setPulseFreq={setPulseFreq}
         pulseWidth={pulseWidth}
