@@ -2,8 +2,7 @@
 import './App.css'
 import { useState } from 'react';
 import { constantData } from './utils/constantData';
-import WaveformWithClock from './components/WaveFormGraph';
-
+import SquareWaveChart from './components/WaveFormGraph';
 
 // TODOS
 // Add logic for pulse gate
@@ -26,26 +25,7 @@ function App() {
 
   return (
     <>
-      <WaveformWithClock 
-        // title="" 
-        // add new freq and put it into the squareValue to handle the master freq
-        clockPeriod={clockPeriod}
-        setClockPeriod={setClockPeriod}
-        pulseWidth={pulseWidth}
-        setPulseWidth={setPulseWidth}
-        dcOffset={dcOffset}
-        setDcOffset={setDcOffset}
-        pulseLock={pulseLock}
-        setPulseLock={setPulseLock}
-        pulseNumOn={pulseNumOn}
-        setPulseNumOn={setPulseNumOn}
-        pulseNumOff={pulseNumOff}
-        setPulseNumOff={setPulseNumOff}
-        pulseGate={pulseGate}
-        setPulseGate={setPulseGate}
-        pulseClockRatio={pulseClockRatio}
-        setPulseClockRatio={setPulseClockRatio}
-      />
+      <SquareWaveChart title={'title'}/>
     </>
   )
 }
