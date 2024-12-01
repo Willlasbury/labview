@@ -6,6 +6,7 @@ import { Label } from "@/components/subComp/label"
 import DropdownList from './genericComp/DropDownList'
 import FrequencyLabel from './FreqLabel'
 import Counter from './genericComp/Counter'
+import PulseLabel from './PulseLabel'
 
 
 
@@ -13,13 +14,14 @@ type Props = {
   title: string
   dutyCycle: number
   setDutyCycle: (num: number) => void
-  dcOffSet: number
+  dcOffset: number
   setDcOffset: (val: number) => void
 }
 
 export default function SquareWaveChart({ title, dutyCycle, setDutyCycle, dcOffset, setDcOffset }: Props) {
   const [frequency, setFrequency] = useState(1000);
   const [freqUnit, setFreqUnit] = useState('kHz');
+  const [pulseUnit, setPulseUnit] = useState('ms');
   const amplitude = 1;
   const duration = 1e-6; // 1 microsecond
   const sampleRate = 100; // n samples
@@ -28,24 +30,29 @@ export default function SquareWaveChart({ title, dutyCycle, setDutyCycle, dcOffs
     const period = 1 / frequency;
     const cyclePosition = time % period;
     const value = cyclePosition < period * dutyCycle ? amplitude : -amplitude;
-    console.log("value, dcOffest:", value, dcOffset)
     return value + dcOffset
   }
 
-  function generateSquareWaveData(frequency: number, amplitude: number, duration: number, sampleRate: number, dutyCycle: number) {
+  function generateSquareWaveData(frequency: number, amplitude: number, sampleRate: number, dutyCycle: number) {
     const data = [];
     const period = 1 / frequency;
-    for (let t = 0; t <= duration; t += period / sampleRate) {
+    // console.log("period:", period)
+    // console.log("sampleRate:", sampleRate)
+    // console.log("period/sampleRate:", (period/sampleRate) )
+    
+    for (let t = 0; t <= period; t += period / sampleRate) {
+
       data.push({
         time: t,
         value: squareWave(frequency, amplitude, t, dutyCycle)
       });
     }
+    // console.log("data:", data)
     return data;
   }
 
   const handleFrequency = (val: number, unit: string) => {
-    console.log('===\n\n\ntest\n\n\n===')
+    // console.log("val:", val)
     if (unit == 'GHz') {
       setFrequency(val * 1e9)
     }
@@ -55,6 +62,16 @@ export default function SquareWaveChart({ title, dutyCycle, setDutyCycle, dcOffs
     if (unit == 'kHz') {
       setFrequency(val * 1e3)
     }
+    if (unit == 'ms') {
+      setFrequency(val * 1e-3)
+    }
+    if (unit == 'µs') {
+      setFrequency(val * 1e-6)
+    }
+    if (unit == 'ns') {
+      setFrequency(val * 1e-9)
+    }
+    
   }
 
   const freqMultiplier = useMemo(() => {
@@ -69,14 +86,13 @@ export default function SquareWaveChart({ title, dutyCycle, setDutyCycle, dcOffs
   const actualFrequency = frequency * freqMultiplier;
 
   const data = useMemo(() =>
-    generateSquareWaveData(actualFrequency, amplitude, duration, sampleRate, dutyCycle),
+    generateSquareWaveData(actualFrequency, amplitude, sampleRate, dutyCycle),
     [actualFrequency, dutyCycle, freqUnit, dcOffset]
   );
 
   // Calculate transition duration based on frequency
   // const transitionDuration = Math.max(50, 500 - Math.log10(actualFrequency) * 50);
   // const xAxisDomain = [0, 1000]
-  console.log("freqUnit:", data)
 
 
 
@@ -144,9 +160,9 @@ export default function SquareWaveChart({ title, dutyCycle, setDutyCycle, dcOffs
             ]}
           /> */}
           <div className="flex items-center space-x-4">
-            <FrequencyLabel title='Frequency' unit={freqUnit} min={1} max={999} step={1} value={frequency} setValue={handleFrequency} freqUnit={freqUnit} setFreqUnit={setFreqUnit} />
-
-          </div>
+            <FrequencyLabel title='Frequency' unit={freqUnit} min={1} max={999} step={1} value={frequency} setValue={handleFrequency} setFreqUnit={setFreqUnit} />
+            <PulseLabel title='Pulse' unit={pulseUnit} min={1} max={999} value={frequency} setValue={handleFrequency} setPulseUnit={setPulseUnit} />
+           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="duty-cycle-slider">Duty Cycle: {(dutyCycle * 100).toFixed(0)}%</Label>

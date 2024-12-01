@@ -15,10 +15,10 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     step?: number
     value: number
     setValue: (val: number, unit: string) => void
-    setFreqUnit: (val: string) => void
+    setPulseUnit: (val: string) => void
 }
 
-export default function FrequencyLabel({
+export default function PulseLabel({
     title,
     unit,
     description,
@@ -27,31 +27,19 @@ export default function FrequencyLabel({
     step = 1,
     value,
     setValue,
-    setFreqUnit
+    setPulseUnit
 }: InputProps) {
 
-    function removeTrailingZeros(num: number) {
-        console.log("num:", num)
-        if (num > 999) {
-            while (num % 10 === 0) {
-                num = Math.floor(num / 10);
-            }
-        }
-        return num;
-    }
-
-    function formatFrequency(freq: number): number {
-        console.log("freq:", removeTrailingZeros(freq))
+    function formatPulse(freq: number): number {
         if (freq >= 1e9) return (freq / 1e9);
         if (freq >= 1e6) return (freq / 1e6);
         if (freq >= 1e3) return (freq / 1e3);
         return freq;
     }
 
-    const handleFreqUnit = (unit: string) => {
-        const nonZeroValue = removeTrailingZeros(value)
-        setFreqUnit(unit)
-        setValue(nonZeroValue, unit)
+    const handlePulseUnit = (unit: string) => {
+        setPulseUnit(unit)
+        setValue(value, unit)
     }
 
     return (
@@ -64,23 +52,23 @@ export default function FrequencyLabel({
             <Input
                 type={'number'}
                 id={title}
-                value={formatFrequency(value)}
+                value={formatPulse(value)}
                 max={max}
                 min={min}
                 step={step}
                 className={"block h-6 w-20 text-right text-black text-lg rounded-md border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm dark:focus:border-gray-50 dark:focus:ring-gray-50"}
                 onChange={(e) => setValue(Number(e.target.value), unit)}
             />
-            <Select value={unit} onValueChange={handleFreqUnit}>
+            <Select value={unit} onValueChange={handlePulseUnit}>
                 <SelectTrigger className="w-80px h-6">
-                    <SelectValue placeholder="Unit" />
+                  <SelectValue placeholder="Unit" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="kHz">kHz</SelectItem>
-                    <SelectItem value="MHz">MHz</SelectItem>
-                    <SelectItem value="GHz">GHz</SelectItem>
+                  <SelectItem value="kHz">kHz</SelectItem>
+                  <SelectItem value="MHz">MHz</SelectItem>
+                  <SelectItem value="GHz">GHz</SelectItem>
                 </SelectContent>
-            </Select>
+              </Select>
         </div>
     )
 }
