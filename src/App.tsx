@@ -29,10 +29,13 @@ function App() {
     <div className=''>
       <SquareWaveChart
         title={'title'}
-        frequency={frequency}
-        setFrequency={setFreq}
+        // frequency={frequency}
+        // setFrequency={setFreq}
         dutyCycle={dutyCycle}
-        setDutyCycle={setDutyCycle} />
+        setDutyCycle={setDutyCycle} 
+        dcOffset={dcOffset}
+        setDcOffset={setDcOffset}
+        />
     </div>
   )
 }

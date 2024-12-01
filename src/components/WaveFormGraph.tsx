@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine, ResponsiveContainer } from 'recharts'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/subComp/card"
 import { Slider } from "@/components/subComp/slider"
 import { Label } from "@/components/subComp/label"
 import DropdownList from './genericComp/DropDownList'
 import FrequencyLabel from './FreqLabel'
+import Counter from './genericComp/Counter'
 
 
 
@@ -12,9 +13,11 @@ type Props = {
   title: string
   dutyCycle: number
   setDutyCycle: (num: number) => void
+  dcOffSet: number
+  setDcOffset: (val: number) => void
 }
 
-export default function SquareWaveChart({ title, dutyCycle, setDutyCycle }: Props) {
+export default function SquareWaveChart({ title, dutyCycle, setDutyCycle, dcOffset, setDcOffset }: Props) {
   const [frequency, setFrequency] = useState(1000);
   const [freqUnit, setFreqUnit] = useState('kHz');
   const amplitude = 1;
@@ -24,9 +27,11 @@ export default function SquareWaveChart({ title, dutyCycle, setDutyCycle }: Prop
   function squareWave(frequency: number, amplitude: number, time: number, dutyCycle: number): number {
     const period = 1 / frequency;
     const cyclePosition = time % period;
-    return cyclePosition < period * dutyCycle ? amplitude : -amplitude;
+    const value = cyclePosition < period * dutyCycle ? amplitude : -amplitude;
+    console.log("value, dcOffest:", value, dcOffset)
+    return value + dcOffset
   }
-  
+
   function generateSquareWaveData(frequency: number, amplitude: number, duration: number, sampleRate: number, dutyCycle: number) {
     const data = [];
     const period = 1 / frequency;
@@ -65,7 +70,7 @@ export default function SquareWaveChart({ title, dutyCycle, setDutyCycle }: Prop
 
   const data = useMemo(() =>
     generateSquareWaveData(actualFrequency, amplitude, duration, sampleRate, dutyCycle),
-    [actualFrequency, dutyCycle, freqUnit]
+    [actualFrequency, dutyCycle, freqUnit, dcOffset]
   );
 
   // Calculate transition duration based on frequency
@@ -90,20 +95,25 @@ export default function SquareWaveChart({ title, dutyCycle, setDutyCycle }: Prop
               left: 20,
               bottom: 5,
             }}
-            
+
           >
-            <CartesianGrid strokeDasharray="5  " fill='' fillOpacity={0.5} horizontalPoints={[0]} verticalPoints={[1]}/>
+            <CartesianGrid strokeDasharray="5  " fill='' fillOpacity={0.5} horizontalPoints={[0]} verticalPoints={[1]} />
             <XAxis
-              
+
               tickLine={false}
               tick={false}
               // domain={[0,10]}
               tickCount={5}
-              // label={{ value: 'Time (μs)', position: 'insideBottomRight', offset: -5 }}
-              // tickFormatter={(value) => (value * 1e6).toFixed(2)}
-              
-              
+            // label={{ value: 'Time (μs)', position: 'insideBottomRight', offset: -5 }}
+            // tickFormatter={(value) => (value * 1e6).toFixed(2)}
+
+
             />
+            <YAxis
+              // domain={[-amplitude * 1.1, amplitude * 1.1]} 
+              label={{ value: '', angle: -90, position: 'insideLeft' }}
+            />
+            <ReferenceLine y={1} stroke="grey" strokeDasharray="5 5" />
             <Line
               type="stepAfter"
               dataKey="value"
@@ -149,6 +159,7 @@ export default function SquareWaveChart({ title, dutyCycle, setDutyCycle }: Prop
             onValueChange={(value) => setDutyCycle(value[0])}
           />
         </div>
+        <Counter title={"DC Offset"} value={dcOffset} setValue={setDcOffset} min={-100} max={100}/>
         <div>
           <p className="text-sm text-muted-foreground mb-2">
             {/* Amplitude: {amplitude}, Duration: {duration} seconds */}
