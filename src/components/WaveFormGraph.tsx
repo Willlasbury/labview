@@ -10,28 +10,27 @@ import FrequencyLabel from './FreqLabel'
 
 type Props = {
   title: string
-  frequency: number
-  setFrequency: (freq: number) => void
   dutyCycle: number
   setDutyCycle: (num: number) => void
 }
 
-export default function SquareWaveChart({ title, frequency, setFrequency, dutyCycle, setDutyCycle }: Props) {
-
+export default function SquareWaveChart({ title, dutyCycle, setDutyCycle }: Props) {
+  const [frequency, setFrequency] = useState(1000);
   const [freqUnit, setFreqUnit] = useState('kHz');
   const amplitude = 1;
   const duration = 1e-6; // 1 microsecond
-  const sampleRate = 999; // 1000 samples
+  const sampleRate = 100; // n samples
 
   function squareWave(frequency: number, amplitude: number, time: number, dutyCycle: number): number {
     const period = 1 / frequency;
     const cyclePosition = time % period;
     return cyclePosition < period * dutyCycle ? amplitude : -amplitude;
   }
-
+  
   function generateSquareWaveData(frequency: number, amplitude: number, duration: number, sampleRate: number, dutyCycle: number) {
     const data = [];
-    for (let t = 0; t <= duration; t += duration / sampleRate) {
+    const period = 1 / frequency;
+    for (let t = 0; t <= duration; t += period / sampleRate) {
       data.push({
         time: t,
         value: squareWave(frequency, amplitude, t, dutyCycle)
@@ -72,7 +71,7 @@ export default function SquareWaveChart({ title, frequency, setFrequency, dutyCy
   // Calculate transition duration based on frequency
   // const transitionDuration = Math.max(50, 500 - Math.log10(actualFrequency) * 50);
   // const xAxisDomain = [0, 1000]
-  console.log("freqUnit:", freqUnit)
+  console.log("freqUnit:", data)
 
 
 
@@ -91,14 +90,20 @@ export default function SquareWaveChart({ title, frequency, setFrequency, dutyCy
               left: 20,
               bottom: 5,
             }}
+            
           >
-            <CartesianGrid strokeDasharray="" />
-            {/* <XAxis
-              dataKey="time"
+            <CartesianGrid strokeDasharray="5  " fill='' fillOpacity={0.5} horizontalPoints={[0]} verticalPoints={[1]}/>
+            <XAxis
+              
+              tickLine={false}
+              tick={false}
               // domain={[0,10]}
-              label={{ value: 'Time (μs)', position: 'insideBottomRight', offset: -5 }}
-              tickFormatter={(value) => (value * 1e6).toFixed(2)}
-            /> */}
+              tickCount={5}
+              // label={{ value: 'Time (μs)', position: 'insideBottomRight', offset: -5 }}
+              // tickFormatter={(value) => (value * 1e6).toFixed(2)}
+              
+              
+            />
             <Line
               type="stepAfter"
               dataKey="value"
@@ -129,8 +134,8 @@ export default function SquareWaveChart({ title, frequency, setFrequency, dutyCy
             ]}
           /> */}
           <div className="flex items-center space-x-4">
-            <FrequencyLabel title='Frequency' unit={freqUnit} min={1} max={999} step={1} value={frequency} setValue={handleFrequency} freqUnit={freqUnit} setFreqUnit={setFreqUnit}/>
-              
+            <FrequencyLabel title='Frequency' unit={freqUnit} min={1} max={999} step={1} value={frequency} setValue={handleFrequency} freqUnit={freqUnit} setFreqUnit={setFreqUnit} />
+
           </div>
         </div>
         <div className="space-y-2">
