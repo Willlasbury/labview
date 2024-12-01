@@ -14,6 +14,8 @@ import SquareWaveChart from './components/WaveFormGraph';
 
 ;
 function App() {
+  const [frequency, setFreq] = useState(10000);
+  const [dutyCycle, setDutyCycle] = useState(0.5); // Start with 50% duty cycle
   const [clockPeriod, setClockPeriod] = useState<number>(1);
   const [pulseWidth, setPulseWidth] = useState<number>(1);
   const [pulseLock, setPulseLock] = useState<boolean>(true);
@@ -24,9 +26,14 @@ function App() {
   const [dcOffset, setDcOffset] = useState(0);
 
   return (
-    <>
-      <SquareWaveChart title={'title'}/>
-    </>
+    <div className=''>
+      <SquareWaveChart
+        title={'title'}
+        frequency={frequency}
+        setFrequency={setFreq}
+        dutyCycle={dutyCycle}
+        setDutyCycle={setDutyCycle} />
+    </div>
   )
 }
 

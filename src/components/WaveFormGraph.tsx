@@ -1,48 +1,57 @@
 import { useState, useMemo } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/subComp/card"
-import { TabComponent } from './genericComp/TabComp'
-import LabelInput from './genericComp/LabelInput'
 import { Slider } from "@/components/subComp/slider"
 import { Label } from "@/components/subComp/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/subComp/select"
 import DropdownList from './genericComp/DropDownList'
+import FrequencyLabel from './FreqLabel'
 
-function squareWave(frequency: number, amplitude: number, time: number, dutyCycle: number): number {
-  const period = 1 / frequency;
-  const cyclePosition = time % period;
-  return cyclePosition < period * dutyCycle ? amplitude : -amplitude;
-}
 
-function generateSquareWaveData(frequency: number, amplitude: number, duration: number, sampleRate: number, dutyCycle: number) {
-  const data = [];
-  for (let t = 0; t <= duration; t += duration / sampleRate) {
-    data.push({
-      time: t,
-      value: squareWave(frequency, amplitude, t, dutyCycle)
-    });
-  }
-  return data;
-}
-
-function formatFrequency(freq: number): string {
-  if (freq >= 1e9) return `${(freq / 1e9).toFixed(2)} GHz`;
-  if (freq >= 1e6) return `${(freq / 1e6).toFixed(2)} MHz`;
-  if (freq >= 1e3) return `${(freq / 1e3).toFixed(2)} kHz`;
-  return `${freq.toFixed(2)} Hz`;
-}
 
 type Props = {
   title: string
+  frequency: number
+  setFrequency: (freq: number) => void
+  dutyCycle: number
+  setDutyCycle: (num: number) => void
 }
 
-export default function SquareWaveChart({ title }: Props) {
-  const [frequency, setFrequency] = useState(10000); // Start with 10 kHz
-  const [dutyCycle, setDutyCycle] = useState(0.5); // Start with 50% duty cycle
+export default function SquareWaveChart({ title, frequency, setFrequency, dutyCycle, setDutyCycle }: Props) {
+
   const [freqUnit, setFreqUnit] = useState('kHz');
   const amplitude = 1;
   const duration = 1e-6; // 1 microsecond
-  const sampleRate = 100; // 1000 samples for the duration
+  const sampleRate = 999; // 1000 samples
+
+  function squareWave(frequency: number, amplitude: number, time: number, dutyCycle: number): number {
+    const period = 1 / frequency;
+    const cyclePosition = time % period;
+    return cyclePosition < period * dutyCycle ? amplitude : -amplitude;
+  }
+
+  function generateSquareWaveData(frequency: number, amplitude: number, duration: number, sampleRate: number, dutyCycle: number) {
+    const data = [];
+    for (let t = 0; t <= duration; t += duration / sampleRate) {
+      data.push({
+        time: t,
+        value: squareWave(frequency, amplitude, t, dutyCycle)
+      });
+    }
+    return data;
+  }
+
+  const handleFrequency = (val: number, unit: string) => {
+    console.log('===\n\n\ntest\n\n\n===')
+    if (unit == 'GHz') {
+      setFrequency(val * 1e9)
+    }
+    if (unit == 'MHz') {
+      setFrequency(val * 1e6)
+    }
+    if (unit == 'kHz') {
+      setFrequency(val * 1e3)
+    }
+  }
 
   const freqMultiplier = useMemo(() => {
     switch (freqUnit) {
@@ -53,19 +62,22 @@ export default function SquareWaveChart({ title }: Props) {
     }
   }, [freqUnit]);
 
-  const actualFrequency = frequency;
+  const actualFrequency = frequency * freqMultiplier;
 
   const data = useMemo(() =>
     generateSquareWaveData(actualFrequency, amplitude, duration, sampleRate, dutyCycle),
-    [actualFrequency, dutyCycle]
+    [actualFrequency, dutyCycle, freqUnit]
   );
 
   // Calculate transition duration based on frequency
-  const transitionDuration = Math.max(50, 500 - Math.log10(actualFrequency) * 50);
-  const xAxisDomain = [0, 10 * (1 / frequency)]
-  console.log("frequency:", frequency)
+  // const transitionDuration = Math.max(50, 500 - Math.log10(actualFrequency) * 50);
+  // const xAxisDomain = [0, 1000]
+  console.log("freqUnit:", freqUnit)
+
+
+
   return (
-    <Card className="w-full max-w-4xl">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
@@ -80,13 +92,13 @@ export default function SquareWaveChart({ title }: Props) {
               bottom: 5,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
+            <CartesianGrid strokeDasharray="" />
+            {/* <XAxis
               dataKey="time"
-              domain={xAxisDomain}
-              label={{ value: 'Time (μs)', position: 'insideBottomRight', offset: -10 }}
-              tickFormatter={(value) => (value * 1e6).toFixed(3)}
-            />
+              // domain={[0,10]}
+              label={{ value: 'Time (μs)', position: 'insideBottomRight', offset: -5 }}
+              tickFormatter={(value) => (value * 1e6).toFixed(2)}
+            /> */}
             <Line
               type="stepAfter"
               dataKey="value"
@@ -102,7 +114,7 @@ export default function SquareWaveChart({ title }: Props) {
 
         <div className="space-y-2">
           {/* <Label htmlFor="frequency-slider">Frequency: {formatFrequency(actualFrequency)}</Label> */}
-          <TabComponent
+          {/* <TabComponent
             title={'Clock Settings'}
             content={[
               // { title: 'Frequency', comp: <LabelInput title={"Frequency"} description="hello" min={1} value={1 / clockPeriod} setValue={(val) => handleClockPeriod(1 / val)} /> },
@@ -110,32 +122,15 @@ export default function SquareWaveChart({ title }: Props) {
                 title: 'Frequency', comp:
                   <>
                     <LabelInput title={"Frequency"} description="hello" min={1} value={frequency} setValue={formatFrequency} />
-                    <Select value={freqUnit} onValueChange={setFreqUnit}>
-                      <SelectTrigger className="w-[80px]">
-                        <SelectValue placeholder="Unit" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="kHz">kHz</SelectItem>
-                        <SelectItem value="MHz">MHz</SelectItem>
-                        <SelectItem value="GHz">GHz</SelectItem>
-                      </SelectContent>
-                    </Select>
 
                   </>
               },
               { title: 'Period', comp: <LabelInput title={"Period"} description="hello" min={1} value={frequency} setValue={formatFrequency} /> },
             ]}
-          />
+          /> */}
           <div className="flex items-center space-x-4">
-            <Slider
-              id="frequency-slider"
-              min={10}
-              max={300}
-              step={1}
-              value={[frequency]}
-              onValueChange={(value) => setFrequency(value[0])}
-              className="flex-grow"
-            />
+            <FrequencyLabel title='Frequency' unit={freqUnit} min={1} max={999} step={1} value={frequency} setValue={handleFrequency} freqUnit={freqUnit} setFreqUnit={setFreqUnit}/>
+              
           </div>
         </div>
         <div className="space-y-2">
@@ -151,7 +146,7 @@ export default function SquareWaveChart({ title }: Props) {
         </div>
         <div>
           <p className="text-sm text-muted-foreground mb-2">
-            Amplitude: {amplitude}, Duration: {duration} seconds
+            {/* Amplitude: {amplitude}, Duration: {duration} seconds */}
           </p>
         </div>
       </CardContent>

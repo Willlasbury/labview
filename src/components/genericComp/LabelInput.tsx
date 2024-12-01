@@ -21,7 +21,7 @@ export default function LabelInput({
   description,
   min,
   max,
-  step,
+  step = 1,
   value,
   setValue,
 }: InputProps) {
