@@ -132,13 +132,13 @@ export default function WaveformWithClock({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={generateWaveform} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3" />
-              <XAxis
+              {/* <XAxis
                 dataKey="x"
                 type="number"
                 domain={xAxisDomain}
                 tickFormatter={(value) => value.toFixed(2)}
                 label={{ value: "Time (s)", position: "insideBottomRight", offset: -5 }}
-              />
+              /> */}
               <YAxis domain={[dcOffset - 1, dcOffset + 1]} />
               <Line
                 type="monotone"
