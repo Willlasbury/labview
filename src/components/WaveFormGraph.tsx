@@ -8,6 +8,7 @@ import Counter from "./genericComp/Counter"
 import DropdownList from "./genericComp/DropDownList"
 import LabelInput from "./genericComp/LabelInput"
 import { constantData } from "@/utils/constantData"
+import { StringLogger } from "./genericComp/LogDisplay"
 
 interface WaveformWithClockProps {
   title?: string
@@ -142,7 +143,7 @@ export default function WaveformWithClock({
               <Line
                 type="monotone"
                 dataKey="sine"
-                stroke='red'
+                stroke='blue'
                 dot={false}
                 isAnimationActive={false}
                 name="Sine Wave"
@@ -218,24 +219,30 @@ export default function WaveformWithClock({
                 { title: 'Pass All', comp: <></> },
                 { title: 'Block All', comp: <></> },
                 {
-                  title: 'Periodic', comp: 
-                  <div className="">
-                    <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
-                    <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
-                  </div>
+                  title: 'Periodic', comp:
+                    <div className="">
+                      <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
+                      <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
+                    </div>
                 },
-                { title: 'Single Shot', comp:  
-                <div className="flex flex-col py-2 w-3/4 items-center">
-                <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} /> 
-                <Button className="bg-blue-500 max-w-36 hover:bg-blue-800 hover:font-semibold">Single Shot</Button>
-                </div>}
+                {
+                  title: 'Single Shot', comp:
+                    <div className="flex flex-col py-2 w-3/4 items-center">
+                      <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
+                      <Button className="bg-blue-500 max-w-36 hover:bg-blue-800 hover:font-semibold">Single Shot</Button>
+                    </div>
+                }
               ]} />
-          <div className="space-y-2 w-1/3">
-            <DropdownList title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
+            <div className="space-y-2 w-1/3">
+              <DropdownList title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
 
-          </div>
-          </div>
 
+            </div >
+          </div>
+        </div>
+        <div>
+
+        <StringLogger title="Session Log" input={['']} />
         </div>
       </CardContent>
     </Card>
