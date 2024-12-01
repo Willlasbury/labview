@@ -22,7 +22,8 @@ export function TabComponent({
             <Tabs.List className={cn(
                 "flex items-center",
                 "p-2 mb-1",
-                "bg-slate-200 border-b border-gray-200"
+                "bg-slate-200 border-b border-gray-200",
+                "overflow-x-auto"
             )}
             >
                 <h4 className='text-xl font-semibold'>

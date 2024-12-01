@@ -5,8 +5,8 @@ import { TabComponent } from "./genericComp/TabComp"
 import { cn } from "@/lib/utils"
 import { Button } from "./subComp/button"
 import Counter from "./genericComp/Counter"
-import DropdownList from "./genericComp/DropDownList"
 import LabelInput from "./genericComp/LabelInput"
+import PulseClockRatio from "./PulseClock"
 import { constantData } from "@/utils/constantData"
 import { StringLogger } from "./genericComp/LogDisplay"
 
@@ -122,7 +122,7 @@ export default function WaveformWithClock({
     // if 
   }
   return (
-    <Card>
+    <Card className="h-dvh w-dvw">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
@@ -169,14 +169,14 @@ export default function WaveformWithClock({
           <div className={cn("h-full flex-col justify-evenly",
             "lg:w-5/12",
             "md:w-5/12",
-            "max-sm:w-full max-sm:min-w-full"
+            "max-md:w-full max-sm:min-w-full"
           )}>
 
             {/* Adjust the Clock frequency aka blue/square line */}
-            <div className={cn("flex space-y-2 m-2 max-h-36 min-w-fit",
+            <div className={cn("flex space-y-2 m-2  max-h-36 min-w-fit",
               "lg:w-10/12",
               "md:w-5/12",
-              "max-sm:w-full max-sm:min-w-full"
+              "sm:w-full max-sm:min-w-full"
             )}>
               <TabComponent
                 title={'Clock Settings'}
@@ -189,7 +189,7 @@ export default function WaveformWithClock({
             </div>
 
             {/* handle the period of the pulse wave through either the specifying the period or as a fraction of the clock period*/}
-            <div className={cn("flex space-y-2 m-2 w-1/3 max-h-36 min-w-fit",
+            <div className={cn("flex space-y-2 m-2  max-h-36 min-w-fit",
               "lg:w-10/12",
               "md:w-5/12",
               "sm:w-full max-sm:min-w-full"
@@ -208,8 +208,8 @@ export default function WaveformWithClock({
 
           <div className={cn("flex flex-col space-y-2 m-2 w-1/3 max-h-36",
             "lg:w-5/12",
-            "md:w-5/12",
-            "max-sm:w-full max-sm:min-w-full"
+            // "md:w-5/12",
+            "max-md:w-full max-sm:min-w-full"
           )}>
             <TabComponent
               title={'Pulse Settings'}
@@ -233,8 +233,12 @@ export default function WaveformWithClock({
                     </div>
                 }
               ]} />
-            <div className="space-y-2 w-1/3">
-              <DropdownList title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
+            <div className={cn("flex flex-col space-y-2 max-h-36",
+            "lg:w-1/2",
+            "md:w-full",
+            "max-sm:w-full max-sm:min-w-full"
+          )}>
+              <PulseClockRatio title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
 
 
             </div >
