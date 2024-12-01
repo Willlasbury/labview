@@ -66,7 +66,7 @@ export default function WaveformWithClock({
 
 
       const sineValue = sinePatternPosition < pulseNumOn && sineActivePeriod && sinePhaseWithinPeriod !== null
-        ? Math.sin(sinePhaseWithinPeriod) + dcOffset
+        ? Math.sign(Math.sin(sinePhaseWithinPeriod)) + dcOffset
         : null
 
       const squareValue = Math.sign(Math.sin(x * 1 / clockPeriod * 2 * Math.PI))
@@ -148,7 +148,7 @@ export default function WaveformWithClock({
                 name="Sine Wave"
                 connectNulls={false}
               />
-              <Line
+              {/* <Line
                 type="stepAfter"
                 dataKey="square"
                 stroke='blue'
@@ -157,7 +157,7 @@ export default function WaveformWithClock({
                 strokeWidth={2}
                 name="Square Wave (Clock)"
                 connectNulls={false}
-              />
+              /> */}
             </LineChart>
           </ResponsiveContainer>
         </div>
