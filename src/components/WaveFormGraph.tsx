@@ -9,6 +9,8 @@ import LabelInput from "./genericComp/LabelInput"
 import PulseClockRatio from "./PulseClock"
 import { constantData } from "@/utils/constantData"
 import { StringLogger } from "./genericComp/LogDisplay"
+import FrequencyLabel from "./FreqLabel"
+import PulseLabel from "./PeriodLabel"
 
 interface WaveformWithClockProps {
   title?: string
@@ -182,8 +184,8 @@ export default function WaveformWithClock({
                 title={'Clock Settings'}
                 content={[
                   // { title: 'Frequency', comp: <LabelInput title={"Frequency"} description="hello" min={1} value={1 / clockPeriod} setValue={(val) => handleClockPeriod(1 / val)} /> },
-                  { title: 'Period', comp: <LabelInput title={"Period"} description="hello" min={1} value={clockPeriod} setValue={handleClockPeriod} /> },
-                  { title: 'Frequency', comp: <LabelInput title={"Frequency"} description="hello" min={1} value={1 / clockPeriod} setValue={handleClockFreqChange} /> },
+                  { title: 'Period', comp: <PulseLabel title={"Period"} description="hello" min={1} value={clockPeriod} setValue={handleClockPeriod} /> },
+                  { title: 'Frequency', comp: <FrequencyLabel title={"Frequency"} description="hello" min={1} value={1 / clockPeriod} setValue={handleClockFreqChange} /> },
                 ]}
               />
             </div>
