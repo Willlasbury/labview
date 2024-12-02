@@ -12,13 +12,12 @@ import TooltipWrapper from "./genericComp/ToolTipWrapper"
   type DropDownListProps = {
     title: string
     description?: string
-    unit?: string
     valueOptions: Array<string>
     defaultValue?: any
     setValue: (value: any) => void;
   }
   
-  export default function PulseClockRatio({ title, description, unit, defaultValue, valueOptions, setValue }: DropDownListProps) {
+  export default function PulseClockRatio({ title, description, defaultValue, valueOptions, setValue }: DropDownListProps) {
     const handleChange = (val: string) => {
       if (Number(val)) {
         return setValue(Number(val))

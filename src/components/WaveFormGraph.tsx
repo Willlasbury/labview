@@ -1,12 +1,12 @@
 import { useState, useMemo } from "react"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { LineChart, Line, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/subComp/card"
 import { TabComponent } from "./genericComp/TabComp"
 import { cn } from "@/lib/utils"
 import { Button } from "./subComp/button"
 import Counter from "./genericComp/Counter"
 import LabelInput from "./genericComp/LabelInput"
-import PulseClockRatio from "./PulseClock"
+// import PulseClockRatio from "./PulseClock"
 import { constantData } from "@/utils/constantData"
 import { StringLogger } from "./genericComp/LogDisplay"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/subComp/select"
@@ -84,7 +84,6 @@ export default function WaveformWithClock({
     })
   }, [clockPeriod, pulseNumOn, pulseNumOff, timeScale, pulseClockRatio, dcOffset, pulseWidth])
 
-  const xAxisDomain = [0, timeScale]
 
   const handleDutyCycle = (val: number) => {
     setPulseWidth(clockPeriod * val / 100)

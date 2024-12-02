@@ -12,13 +12,13 @@ export function StringLogger({title, input}: StringLoggerProps) {
   const [log, setLog] = useState<string[]>([])
   const [isMinimized, setIsMinimized] = useState<boolean>(true)
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (input[input.length-1].trim()) {
-      setLog(prev => [...prev, input[input.length-1].trim()])
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   if (input[input.length-1].trim()) {
+  //     setLog(prev => [...prev, input[input.length-1].trim()])
       
-    }
-  }
+  //   }
+  // }
 
   const clearLog = () => {
     setLog([])
