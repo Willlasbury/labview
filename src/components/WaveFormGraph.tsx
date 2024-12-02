@@ -250,7 +250,7 @@ export default function WaveformWithClock({
         </div>
         <div>
 
-          <StringLogger title="Session Log" input={['']} />
+          <StringLogger title="Session Log" />
         </div>
       </CardContent>
     </Card>
