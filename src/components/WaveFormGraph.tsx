@@ -5,9 +5,11 @@ import { TabComponent } from "./genericComp/TabComp"
 import { cn } from "@/lib/utils"
 import { Button } from "./subComp/button"
 import Counter from "./genericComp/Counter"
-import DropdownList from "./genericComp/DropDownList"
 import LabelInput from "./genericComp/LabelInput"
+import PulseClockRatio from "./PulseClock"
 import { constantData } from "@/utils/constantData"
+import { StringLogger } from "./genericComp/LogDisplay"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/subComp/select"
 
 interface WaveformWithClockProps {
   title?: string
@@ -48,6 +50,8 @@ export default function WaveformWithClock({
   setPulseClockRatio,
 
 }: WaveformWithClockProps) {
+  const [freqUnit, setFreqUnit] = useState('khz');
+  const [periodUnit, setPeriodUnit] = useState('ms');
   // Sets the time scale for the x axis on the graph and is used in creating data points
   const [timeScale, setTimeScale] = useState(10)
   // Controls the pulse width and sets it at the clockPeriod to start 
@@ -66,7 +70,7 @@ export default function WaveformWithClock({
 
 
       const sineValue = sinePatternPosition < pulseNumOn && sineActivePeriod && sinePhaseWithinPeriod !== null
-        ? Math.sin(sinePhaseWithinPeriod) + dcOffset
+        ? Math.sign(Math.sin(sinePhaseWithinPeriod)) + dcOffset
         : null
 
       const squareValue = Math.sign(Math.sin(x * 1 / clockPeriod * 2 * Math.PI))
@@ -102,13 +106,6 @@ export default function WaveformWithClock({
     }
     setClockPeriod(val)
   }
-  // const handleMasterFreq = (val: number) => {
-  //   const freq = 1/val
-  //   if (freq < (pulseWidth)) {
-  //     setPulseWidth(1/freq)
-  //   }
-  //   setClockPeriod(1/freq)
-  // }
   const handleClockFreqChange = (val: number) => {
 
     setClockPeriod(1 / val)
@@ -121,7 +118,7 @@ export default function WaveformWithClock({
     // if 
   }
   return (
-    <Card>
+    <Card className="h-dvh w-dvw">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
@@ -131,31 +128,14 @@ export default function WaveformWithClock({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={generateWaveform} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3" />
-              <XAxis
-                dataKey="x"
-                type="number"
-                domain={xAxisDomain}
-                tickFormatter={(value) => value.toFixed(2)}
-                label={{ value: "Time (s)", position: "insideBottomRight", offset: -5 }}
-              />
               <YAxis domain={[dcOffset - 1, dcOffset + 1]} />
               <Line
                 type="monotone"
                 dataKey="sine"
-                stroke='red'
-                dot={false}
-                isAnimationActive={false}
-                name="Sine Wave"
-                connectNulls={false}
-              />
-              <Line
-                type="stepAfter"
-                dataKey="square"
                 stroke='blue'
                 dot={false}
                 isAnimationActive={false}
-                strokeWidth={2}
-                name="Square Wave (Clock)"
+                name="Sine Wave"
                 connectNulls={false}
               />
             </LineChart>
@@ -168,27 +148,53 @@ export default function WaveformWithClock({
           <div className={cn("h-full flex-col justify-evenly",
             "lg:w-5/12",
             "md:w-5/12",
-            "max-sm:w-full max-sm:min-w-full"
+            "max-md:w-full max-sm:min-w-full"
           )}>
 
             {/* Adjust the Clock frequency aka blue/square line */}
-            <div className={cn("flex space-y-2 m-2 max-h-36 min-w-fit",
+            <div className={cn("flex space-y-2 m-2  max-h-36 min-w-fit",
               "lg:w-10/12",
               "md:w-5/12",
-              "max-sm:w-full max-sm:min-w-full"
+              "sm:w-full max-sm:min-w-full"
             )}>
               <TabComponent
                 title={'Clock Settings'}
                 content={[
                   // { title: 'Frequency', comp: <LabelInput title={"Frequency"} description="hello" min={1} value={1 / clockPeriod} setValue={(val) => handleClockPeriod(1 / val)} /> },
-                  { title: 'Period', comp: <LabelInput title={"Period"} description="hello" min={1} value={clockPeriod} setValue={handleClockPeriod} /> },
-                  { title: 'Frequency', comp: <LabelInput title={"Frequency"} description="hello" min={1} value={1 / clockPeriod} setValue={handleClockFreqChange} /> },
+                  { title: 'Frequency', comp: <>
+                  <LabelInput title={"Frequency"} description="hello" min={1} max={999} value={1 / clockPeriod} setValue={handleClockFreqChange} /> 
+                      <Select value={freqUnit} onValueChange={(e:string) => setFreqUnit(e)}>
+                        <SelectTrigger className="w-20 h-6">
+                          <SelectValue placeholder={freqUnit} />
+                        </SelectTrigger>
+                        <SelectContent >
+                          <SelectItem value="kHz">kHz</SelectItem>
+                          <SelectItem value="MHz">MHz</SelectItem>
+                          <SelectItem value="GHz">GHz</SelectItem>
+                        </SelectContent>
+                      </Select>
+                  </>},
+                    {
+                        title: 'Period', comp: <>
+                          <LabelInput title={"Period"} description="hello" min={1} max={999} value={clockPeriod} setValue={handleClockPeriod} />
+                          <Select value={periodUnit} onValueChange={e => setPeriodUnit(e)}>
+                            <SelectTrigger className="w-20 h-6">
+                              <SelectValue placeholder="Unit" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="kHz">ms</SelectItem>
+                              <SelectItem value="MHz">µs</SelectItem>
+                              <SelectItem value="GHz">ns</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </>
+                      },
                 ]}
               />
             </div>
 
             {/* handle the period of the pulse wave through either the specifying the period or as a fraction of the clock period*/}
-            <div className={cn("flex space-y-2 m-2 w-1/3 max-h-36 min-w-fit",
+            <div className={cn("flex space-y-2 m-2  max-h-36 min-w-fit",
               "lg:w-10/12",
               "md:w-5/12",
               "sm:w-full max-sm:min-w-full"
@@ -207,8 +213,8 @@ export default function WaveformWithClock({
 
           <div className={cn("flex flex-col space-y-2 m-2 w-1/3 max-h-36",
             "lg:w-5/12",
-            "md:w-5/12",
-            "max-sm:w-full max-sm:min-w-full"
+            // "md:w-5/12",
+            "max-md:w-full max-sm:min-w-full"
           )}>
             <TabComponent
               title={'Pulse Settings'}
@@ -218,24 +224,34 @@ export default function WaveformWithClock({
                 { title: 'Pass All', comp: <></> },
                 { title: 'Block All', comp: <></> },
                 {
-                  title: 'Periodic', comp: 
-                  <div className="">
-                    <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
-                    <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
-                  </div>
+                  title: 'Periodic', comp:
+                    <div className="">
+                      <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
+                      <Counter title={"Pulse Number Off"} value={pulseNumOff} setValue={setPulseNumOff} />
+                    </div>
                 },
-                { title: 'Single Shot', comp:  
-                <div className="flex flex-col py-2 w-3/4 items-center">
-                <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} /> 
-                <Button className="bg-blue-500 max-w-36 hover:bg-blue-800 hover:font-semibold">Single Shot</Button>
-                </div>}
+                {
+                  title: 'Single Shot', comp:
+                    <div className="flex flex-col py-2 w-3/4 items-center">
+                      <Counter title={"Pulse Number On"} value={pulseNumOn} setValue={setPulseNumOn} min={1} />
+                      <Button className="bg-blue-500 max-w-36 hover:bg-blue-800 hover:font-semibold">Single Shot</Button>
+                    </div>
+                }
               ]} />
-          <div className="space-y-2 w-1/3">
-            <DropdownList title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
+            <div className={cn("flex flex-col space-y-2 max-h-36",
+              "lg:max-w-5/6 ",
+              "md:w-full",
+              "max-sm:w-full max-sm:min-w-full"
+            )}>
+              <PulseClockRatio title={"Pulse to Clock Out Ratio"} defaultValue={1} valueOptions={constantData.pulseClockOut.array} setValue={setPulseClockRatio} />
 
-          </div>
-          </div>
 
+            </div >
+          </div>
+        </div>
+        <div>
+
+          <StringLogger title="Session Log" input={['']} />
         </div>
       </CardContent>
     </Card>
