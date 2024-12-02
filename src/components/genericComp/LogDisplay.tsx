@@ -5,10 +5,9 @@ import { ChevronUp, ChevronDown, Trash } from "lucide-react"
 import { cn } from "@/lib/utils"
 type StringLoggerProps = {
     title:string
-    input:string[]
 }
 
-export function StringLogger({title, input}: StringLoggerProps) {
+export function StringLogger({title}: StringLoggerProps) {
   const [log, setLog] = useState<string[]>([])
   const [isMinimized, setIsMinimized] = useState<boolean>(true)
 
